@@ -29,6 +29,8 @@ Haz clic en el libro deseado y selecciona la opción para solicitar autorizació
 ### 🔹 Gestionar tus libros solicitados
 Dentro de tu perfil, visualiza todos los libros que has solicitado y revisa su estado.
 
+### Vista Previa Home!
+https://docs.google.com/document/d/1Q2eXSopvVF7cYtHQ927N5tFQZ_OxtbthrszESmlhdns/edit?usp=sharing
 ## Contribuciones
 Estamos abiertos a mejoras y sugerencias para optimizar la plataforma. Si deseas contribuir, visita nuestro repositorio en GitHub o contáctanos directamente.
 
