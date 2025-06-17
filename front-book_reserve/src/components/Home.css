@@ -1,0 +1,83 @@
+.home-container {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.search-bar {
+  margin: 20px 0;
+}
+
+.search-bar input {
+  width: 60%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #673561;
+  background-color: rgba(124, 9, 71, 0.332);
+}
+
+.title {
+  font-size: 65px;
+  font-weight: bold;
+  font-family: 'libre baskerville', serif;
+  text-align: center;
+  background: linear-gradient(to right, #ca991b, #32449d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
+}
+
+.sections {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.section {
+  width: 60%;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.tus-libros {
+    font-size: medium;
+    background-color: #eaa7e0;
+    color: black;
+    font-family: 'IM Fell Great Primer', serif;
+}
+
+.historial-lecturas {
+  background-color: #b292ee;
+  font-size: large;
+  color: black;
+  font-family: 'IM Fell Great Primer', serif;
+}
+
+.section-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.recomendaciones {
+  background-color: #6e5f95;
+  justify-content: center;
+  text-justify: inter-word;
+  flex: 1;
+  font-size: large;
+  color: black;
+  font-family: 'IM Fell Great Primer', serif;
+}
+
+.generos-mas-leidos {
+  background-color: #f67494;
+  flex: 1;
+  font-size: large;
+  color: black;
+  font-family: 'IM Fell Great Primer', serif;
+}
