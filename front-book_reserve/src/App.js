@@ -1,10 +1,15 @@
-import Home from "./components/Home";
+import React from "react";
+import { AuthProvider } from "./context/AuthContext";
+import Home from "./components/Home/Home";
+import './App.css';
 
 function App() {
   return (
-    <div>
-      <Home />
-    </div>
+    <AuthProvider>
+      <div className="App">
+        <Home />
+      </div>
+    </AuthProvider>
   );
 }
 
