@@ -36,10 +36,6 @@ nav ul {
     list-style: none;
 }
 
-nav ul li {
-    margin-left: 1.5rem;
-}
-
 nav ul li a {
     color: var(--beige);
     text-decoration: none;
@@ -48,7 +44,8 @@ nav ul li a {
     font-size: 1.1rem;
 }
 
-nav ul li a:hover {
+nav ul li a:hover,
+nav ul li a.active {
     color: var(--cafe);
 }
 

@@ -1,7 +1,7 @@
 .book-card {
     background-color: var(--beige);
     border-radius: 8px;
-    overflow: 
+    overflow: hidden;
     box-shadow 0 5px 15px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
     color: var(--cafe-oscuro);
@@ -29,15 +29,31 @@
     margin-bottom: 0.5rem;
     color: var(--azul-oscuro);
     font-size: 1.1rem;
+    line-height: 1.3;
 }
 
 .book-author {
     color: var(--cafe);
     font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.book-genre {
+    display: inline-block;
+    background-color: var(--azul-oscuro);
+    color: var(--beige);
+    padding: 0.2rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
     margin-bottom: 1rem;
 }
 
 .book-actions {
     display: flex;
     justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.book-actions button {
+    flex: 1;
 }

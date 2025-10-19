@@ -3,7 +3,7 @@ import BookCard from '../BookCard/BookCard';
 import FilterBar from '../FilterBar/FilterBar';
 import './BookCatalog.css';
 
-const BookCatalog = () => {
+const BookList = () => {
   const [books] = useState([
     {
       id: 1,
@@ -44,20 +44,20 @@ const BookCatalog = () => {
   ]);
 
   return (
-    <section className="books" id="catalogo">
+    <section className="books-list" id="catalogo">
       <div className="container">
         <div className="section-title">
           <h2>Catálogo de Libros</h2>
           <p>Explora nuestra amplia colección de libros disponibles</p>
         </div>
-        <FilterBar />
+        <FilterBar totalBooks={books.length} />
         <div className="books-grid">
           {books.map(book => (
             <BookCard 
               key={book.id}
               title={book.title}
               author={book.author}
-              cover={book.cover}
+              genre={book.genre}
             />
           ))}
         </div>
@@ -66,4 +66,4 @@ const BookCatalog = () => {
   );
 };
 
-export default BookCatalog;
+export default BookList;

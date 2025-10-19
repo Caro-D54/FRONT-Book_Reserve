@@ -24,3 +24,8 @@
     color: var(--azul-oscuro);
     font-size: 1.3rem;
 }
+
+.feature-card p {
+    color: var(--cafe-oscuro);
+    line-height: 1.6;
+}

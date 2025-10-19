@@ -1,10 +1,13 @@
 .hero {
-    background: linear-gradient(rgba(5, 10, 48, 0.85), rgba(5, 10, 48, 0.9)), "C:\Git\FRONT-Book_Reserve_repo\front-book_reserve\src\assets\library-image_16729686.jpg";
+    background: linear-gradient(rgba(5, 10, 48, 0.85), rgba(5, 10, 48, 0.9)), "/assets/fondo_home.jpg";
     background-size: cover;
     background-position: center;
     color: var(--beige);
     padding: 5rem 0;
     text-align: center;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
 }
 
 .hero h2 {
@@ -17,5 +20,6 @@
     font-size: 1.3rem;
     max-width: 700px;
     margin: 0 auto 2rem;
+    opacity: 0.9;
 }
 

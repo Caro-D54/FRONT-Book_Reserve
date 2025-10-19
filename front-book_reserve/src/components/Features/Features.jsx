@@ -1,5 +1,5 @@
 import React from "react";
-import FeatureCard from "./FeatureCard";
+import FeatureCard from "../FeatureCard/FeatureCard";
 import "./Features.css";
 
 const Features = () => {

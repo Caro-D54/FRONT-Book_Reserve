@@ -10,6 +10,7 @@
     border: none;
     border-radius: 4px 0 0 4px;
     font-size: 1rem;
+    outline: none;
 }
 
 .search-bar button {

@@ -1,9 +1,9 @@
-import React from "react";
+import React, {useState}  from "react";
 import "./FilterBar.css";
 
-const FilterBar = () => {
+const FilterBar = ({totalBooks}) => {
     const [genre, setGenre] = useState('');
-    const [sort, setSort] = useState('');
+    const [sortBy, setSortBy] = useState('');
 
     return (
         <div className="filter-bar">
@@ -26,14 +26,14 @@ const FilterBar = () => {
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
                 >
-                    <option value="relevancia">Relevancia</option>
-                    <option value="titulo">Título</option>
-                    <option value="autor">Autor</option>
-                    <option value="fecha">Fecha</option>
+                    <option value="relevancia">Ordenar por: Relevancia</option>
+                    <option value="titulo">Ordenar por: Título A-Z</option>
+                    <option value="autor">Ordenar por: Autor A-Z</option>
+                    <option value="fecha">Ordenar por: Fecha</option>
                 </select>
             </div>
-            <div>
-                <span>Mostrando 12 de 345 libros</span>
+            <div className="book-count">
+                <span>Mostrando {totalBooks} libros</span>
             </div>
         </div>
     );

@@ -1,7 +1,15 @@
 import React from "react";
+import { useAuth} from "../../context/AuthContext";
 import './Header.css';
 
 const Header = () => {
+    const { isAuthenticated, user, login,logout } = useAuth();
+
+    const handleLogin = () => {
+        login({ username: "admin", password: "1234" });
+    };
+
+
     return (
         <header className="header">
             <div className="container">
@@ -12,20 +20,34 @@ const Header = () => {
                     </div>
                     <nav>
                         <ul>
-                            <li><a href="#" className="active">Inicio</a></li>
+                            <li><a href="#inicio" className="active">Inicio</a></li>
                             <li><a href="#catalogo">Catálogo</a></li>
                             <li><a href="#perfil">Mi Perfil</a></li>
-                            <li><a href="#ayuda">Ayuda</a></li>
                         </ul>
                     </nav>
                     <div className="user-actions">
-                        <button className="btn btn-outline" id="loginBtn">Iniciar Sesió</button>
-                        <button className="btn btn-primary" id="registerBtn">Registrarse</button>
-                    </div>
+                        {isAuthenticated ? (
+                            <>
+                             <span>Hola, {user?.name}</span>
+                             <button className="btn btn-outline" onClick={logout}>
+                                Cerrar Sesión
+                             </button>
+                            </>
+                        ) : (
+                          <>
+                            <button className="btn btn-outline" onClick={handleLogin}>
+                                Iniciar Sesión
+                            </button>
+                            <button className="btn btn-primary">
+                                Registrarse
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
-        </header>
-    );
+        </div>
+    </header>
+);
 };
 
 export default Header;

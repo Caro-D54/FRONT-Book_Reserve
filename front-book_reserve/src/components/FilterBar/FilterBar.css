@@ -1,6 +1,7 @@
 .filter-bar {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 2rem;
     flex-wrap: wrap;
     gap: 15px;
@@ -12,9 +13,20 @@
 }
 
 .filter-select {
-    padding: 8px 12px;
+    padding: 8px 15px;
     border: 1px solid var(--cafe);
     border-radius: 4px;
     background-color: var(--azul-oscuro);
     color: var(--beige);
+    cursor: pointer;
+}
+
+.filter-select option {
+    background-color: var(--azul-oscuro);
+    color: var(--beige);
+}
+
+.book-count {
+    color: var(--beige);
+    font-size: 0.9rem;
 }
