@@ -1,12 +1,15 @@
 import React from "react";
 import "./Home.css"; // Archivo de estilos
 
-const Home = () => {
+const Home = ({setCurrentView}) => {
   return (
     <div className="home-container">
       {/* Barra de búsqueda */}
       <div className="search-bar">
-        <input type="text" placeholder="Busca tus títulos..." />
+        <input type="text" 
+        placeholder="Busca tus títulos..." 
+        onClick={() => setCurrentView('catalog')}
+        />
       </div>
 
       {/* Título */}
