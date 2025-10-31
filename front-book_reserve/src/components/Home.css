@@ -1,7 +1,8 @@
 .home-container {
-  width: 80%;
-  margin: 0 auto;
-  text-align: center;
+  padding: 2rem;
+  min-height: calc(100vh - 140px);
+  background: linear-gradient(135deg, #0A1931 0%, #1A3C6E 100%);
+  color: #F8F5F0;
 }
 
 .search-bar {
@@ -9,75 +10,121 @@
 }
 
 .search-bar input {
-  width: 60%;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #673561;
-  background-color: rgba(124, 9, 71, 0.332);
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #F8F5F0;
+  font-size: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(201, 169, 106, 0.3);
+  cursor: pointer;
+}
+
+.search-bar input::placeholder {
+  color: rgba(248, 245, 240, 0.7);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #C9A96A;
 }
 
 .title {
-  font-size: 65px;
-  font-weight: bold;
-  font-family: 'libre baskerville', serif;
   text-align: center;
-  background: linear-gradient(to right, #ca991b, #32449d);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 20px;
+  font-size: 3.5rem;
+  margin-bottom: 3rem;
+  color: #C9A96A;
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .sections {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .section {
-  width: 60%;
-  padding: 15px;
-  border-radius: 5px;
-  font-size: 18px;
-  font-weight: bold;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3rem 2rem;
+  border-radius: 15px;
   text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 2px solid transparent;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.tus-libros {
-    font-size: medium;
-    background-color: #eaa7e0;
-    color: black;
-    font-family: 'IM Fell Great Primer', serif;
-}
-
-.historial-lecturas {
-  background-color: #b292ee;
-  font-size: large;
-  color: black;
-  font-family: 'IM Fell Great Primer', serif;
+.section:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #C9A96A;
+  transform: translateY(-5px);
 }
 
 .section-group {
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 2rem;
+  grid-column: 1 / -1;
+}
+
+.section-group .section {
+  min-height: 150px;
+}
+
+.tus-libros {
+  background: linear-gradient(135deg, #C9A96A, #A68A56);
+  color: #0A1931;
+}
+
+.historial-lecturas {
+  background: linear-gradient(135deg, #2D5A9F, #1A3C6E);
 }
 
 .recomendaciones {
-  background-color: #6e5f95;
-  justify-content: center;
-  text-justify: inter-word;
-  flex: 1;
-  font-size: large;
-  color: black;
-  font-family: 'IM Fell Great Primer', serif;
+  background: linear-gradient(135deg, #4A7BC3, #2D5A9F);
 }
 
 .generos-mas-leidos {
-  background-color: #f67494;
-  flex: 1;
-  font-size: large;
-  color: black;
-  font-family: 'IM Fell Great Primer', serif;
+  background: linear-gradient(135deg, #1A3C6E, #0A1931)
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .sections {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 2rem 1rem;
+    min-height: 150px;
+    font-size: 1.2rem;
+  }
+
+  .section-group {
+    grid-column: 1;
+  }
 }
