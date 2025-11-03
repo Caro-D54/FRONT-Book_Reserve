@@ -11,6 +11,8 @@ function App() {
   const [user, setUser] = useState(null);
   const [currentView, setCurrentView] = useState('home');
 
+  const[searchQuery, setSearchQuery] = useState("");
+
   return (
     <div className="App">
       <Header 
