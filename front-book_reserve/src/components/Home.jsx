@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from '../../context/AuthContext'
+import { AuthContext} from "../context/AuthContext";
 import "./Home.css"; // Archivo de estilos
 
 const Home = ({setCurrentView}) => {
