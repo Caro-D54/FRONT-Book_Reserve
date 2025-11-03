@@ -1,27 +1,73 @@
 import React from "react";
+import { useAuth } from '../../context/AuthContext'
 import "./Home.css"; // Archivo de estilos
 
 const Home = ({setCurrentView}) => {
+  const { user } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const safeSetView = (v) => typeof setCurrentView === 'function' && setCurrentView(v);
+
+  const handleSearch = (e) => {
+    if (e.key === 'Enter') {
+      safeSetView('catalog');
+    }
+  };
+
   return (
     <div className="home-container">
       {/* Barra de búsqueda */}
       <div className="search-bar">
         <input type="text" 
+        aria-label="Buscar títulos, autores o géneros"
         placeholder="Busca tus títulos..." 
-        onClick={() => setCurrentView('catalog')}
+        value={query}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        onKeyDown={handleSearchKey}
+        onClick={() => safeSetView('catalog')}
         />
       </div>
 
       {/* Título */}
       <h1 className="title">NEXUS LITERARIO</h1>
 
+      {/* Mensaje de bienvenida */}
+      <div className="Bienvenido/a">
+        <p>Bienvenido/a {user?.name ? `, ${user.name}` : ''}</p>
+      </div>
+
       {/* Secciones */}
       <div className="sections">
-        <div className="section tus-libros">Tus Libros</div>
-        <div className="section historial-lecturas">Historial de Lecturas</div>
+        <button
+          type="button"
+          className="section tus-libros"
+          onClick={() => safeSetView('catalog')}
+        >
+          Tus Libros
+        </button>
+        <button
+          type="button"
+          className="section historial-lecturas"
+          onClick={() => safeSetView('profile')}
+        >
+          Historial de Lecturas
+        </button>
+
         <div className="section-group">
-          <div className="section recomendaciones">Recomendaciones</div>
-          <div className="section generos-mas-leidos">Géneros Más Leídos</div>
+          <button
+            type="button"
+            className="section recomendaciones"
+            onClick={() => safeSetView('recommendations')}
+          >
+            Recomendaciones
+          </button>
+          <button
+            type="button"
+            className="section generos-mas-leidos"
+            onClick={() => safeSetView('genres')}
+          >
+            Géneros Más leídos
+          </button>
         </div>
       </div>
     </div>
