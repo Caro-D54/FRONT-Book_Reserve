@@ -3,6 +3,7 @@
     color: #F8F5F0;
     padding: 1rem 0;
     border-bottom: 3px solid #C9A96A;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .header-content {
@@ -17,7 +18,7 @@
     gap: 10px;
 }
 
-.logo img {
+.logo i {
     font-size: 2rem;
     color: #C9A96A;
 }
@@ -48,6 +49,7 @@
 .nav-btn:active {
     background: #C9A96A;
     color: #0A1931;
+    font-weight: bold;
 }
 
 .user-menu {

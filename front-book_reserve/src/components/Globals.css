@@ -83,4 +83,13 @@ body {
     .container {
         width: 95%;
     }
+
+    .fallback-view {
+        padding: 2rem;
+        text-align: center;
+        color: var(--cafe-oscuro);
+        background-color: rgba(120, 93, 50, 0.05);
+        border-radius: 8px;
+        margin: 2rem;
+    }
 }

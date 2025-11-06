@@ -1,8 +1,15 @@
+:root {
+  --color-bg: #0A1931;
+  --color-accent: #C9A96A;
+  --color-text: #F8F5F0;
+  --color-muted: #E6D5B8;
+  --blur-bg: rgba(255, 255, 255, 0.1);
+  }
 .home-container {
   padding: 2rem;
   min-height: calc(100vh - 140px);
-  background: linear-gradient(135deg, #0A1931 0%, #1A3C6E 100%);
-  color: #F8F5F0;
+  background: linear-gradient(135deg, var(--color-bg), #1A3C6E);
+  color: var(--color-text);
 }
 
 .search-bar {
@@ -19,8 +26,8 @@
   padding: 1rem 1.5rem;
   border: none;
   border-radius: 25px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #F8F5F0;
+  background: var(--blur-bg);
+  color: var(--color-text);
   font-size: 1rem;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(201, 169, 106, 0.3);
@@ -33,14 +40,14 @@
 
 .search-bar input:focus {
   outline: none;
-  border-color: #C9A96A;
+  border-color: var(--color-accent);
 }
 
 .title {
   text-align: center;
   font-size: 3.5rem;
   margin-bottom: 3rem;
-  color: #C9A96A;
+  color: var(--color-accent);
   letter-spacing: 3px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -72,7 +79,7 @@
 
 .section:hover {
   background: rgba(255, 255, 255, 0.15);
-  border-color: #C9A96A;
+  border-color: var(--color-accent);
   transform: translateY(-5px);
 }
 
@@ -151,6 +158,7 @@
 
   .section i {
     font-size: 2.5rem;
+    color: var(--color-accent);
     margin-bottom: 1rem;
     display: block;
   }
@@ -190,18 +198,36 @@
 
   .stat-card i {
     font-size: 2rem;
-    color: #C9A96A;
+    color: var(--color-accent);
   }
 
   .stat-card h4 {
     font-size: 2rem;
     margin: 0;
-    color: #C9A96A;
+    color: var(--color-accent);
   }
 
   .stat-card p {
     margin: 0;
-    color: #E6D5B8;
+    color: var(--color-muted);
     font-size: 0.9rem;
   }
+
+  .section {
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+  }
+
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+    
 }

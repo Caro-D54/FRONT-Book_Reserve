@@ -13,6 +13,32 @@ function App() {
 
   const[searchQuery, setSearchQuery] = useState("");
 
+  const renderView = () => {
+    switch (currentView) {
+      case 'home':
+        return (
+        <Home
+        setCurrentView={setCurrentView}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery} 
+        />
+        );
+      case 'catalog':
+        return <BookList user={user} searchQuery={searchQuery} />;
+      case 'profile':
+        return <Profile user={user} />;
+      case 'recommendations':
+        return <Recommendations user={user} />;
+      default:
+        return (
+          <div className="fallback-view">
+            <h2>Vista no encontrada</h2>
+            <p>La vista <strong>{currentView}</strong> no existe</p>
+          </div>
+        );
+      }
+  };
+
   return (
     <div className="App">
       <Header 
@@ -24,15 +50,9 @@ function App() {
         setSearchQuery={setSearchQuery}
       />
       <main className="main-content">
-        {currentView === 'home' && <Home setCurrentView={setCurrentView} />}
-        {currentView === 'catalog' && (
-          <BookList 
-          user={user}
-          searchQuery={searchQuery}
-        />)}
-        {currentView === 'profile' && <Profile user={user} />}
-        {currentView === 'recommendations' && <Recommendations user={user} />}
+        {renderView()}
       </main>
+        
       <footer className="footer">
         <div className="container">
           <p>&copy; 2023 Biblioteca Virtual Nexus Literario</p>

@@ -1,76 +1,57 @@
 import React from "react";
-import { AuthContext} from "../context/AuthContext";
+import { useAuth} from "../context/AuthContext";
 import "./Home.css"; // Archivo de estilos
 
-const Home = ({setCurrentView}) => {
+const Home = ({setCurrentView, searchQuery, setSearchQuery}) => {
   const { user } = useAuth();
-  const [searchQuery, setSearchQuery] = useState("");
-
-  const safeSetView = (v) => typeof setCurrentView === 'function' && setCurrentView(v);
-
+  
   const handleSearch = (e) => {
     if (e.key === 'Enter') {
-      safeSetView('catalog');
+      setCurrentView('catalog');
     }
   };
 
   return (
     <div className="home-container">
+      <h1 className="title">Bienvenido a Nexus Literario</h1>
       {/* Barra de búsqueda */}
       <div className="search-bar">
         <input type="text" 
-        aria-label="Buscar títulos, autores o géneros"
-        placeholder="Busca tus títulos..." 
-        value={query}
+        value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        onKeyDown={handleSearchKey}
-        onClick={() => safeSetView('catalog')}
+        onKeyDown={handleSearch}
+        placeholder="Buscar por título, autor o género"
+        aria-label="Campo de búsqueda de libros"
         />
-      </div>
-
-      {/* Título */}
-      <h1 className="title">NEXUS LITERARIO</h1>
-
-      {/* Mensaje de bienvenida */}
-      <div className="Bienvenido/a">
-        <p>Bienvenido/a {user?.name ? `, ${user.name}` : ''}</p>
       </div>
 
       {/* Secciones */}
       <div className="sections">
-        <button
-          type="button"
+        <div
           className="section tus-libros"
-          onClick={() => safeSetView('catalog')}
+          onClick={() => setCurrentView('profile')}
+          aria-label="Ver tus libros"
         >
-          Tus Libros
-        </button>
-        <button
-          type="button"
-          className="section historial-lecturas"
-          onClick={() => safeSetView('profile')}
-        >
-          Historial de Lecturas
-        </button>
-
-        <div className="section-group">
-          <button
-            type="button"
-            className="section recomendaciones"
-            onClick={() => safeSetView('recommendations')}
-          >
-            Recomendaciones
-          </button>
-          <button
-            type="button"
-            className="section generos-mas-leidos"
-            onClick={() => safeSetView('genres')}
-          >
-            Géneros Más leídos
-          </button>
+          <i className="fas fa-book"></i>
+          <h3>Tus libros</h3>
         </div>
-      </div>
-    </div>
+        <div
+        className="section recomendaciones"
+        onClick={() => setCurrentView('recommendations')}
+        aria-label="Ver recomendaciones"
+          >
+            <i className="fas fa-star"></i>
+            <h3>Recomendaciones</h3>
+          </div>
+          <div
+          className="section generos-mas-leidos"
+          onClick={() => setCurrentView('catalog')}
+          aria-label="Ver géneros más leídos"
+          >
+            <h3>Géneros más leídos</h3>
+          </div>
+        </div>
+      </div> 
   );
 };
 

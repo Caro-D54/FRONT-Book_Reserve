@@ -1,4 +1,4 @@
-import React, {useState, useEffect, use} from "react";
+import React, {useState, useEffect} from "react";
 import "./BookList.css";
 
 const BookList = ({user, searchQuery}) => {
@@ -15,14 +15,17 @@ const BookList = ({user, searchQuery}) => {
             title: "Cien Años de Soledad",
             author: "Gabriel García Márquez",
             cover: "📖",
-            description: "Una obra maestra del realismo mágico que narra la historia de la familia Buendía."
+            description: "Una obra maestra del realismo mágico que narra la historia de la familia Buendía.",
+            generos: "Ficción",
+            year: 1967
         },
         {
             id: 2,
             title: "1984",
             author: "George Orwell", 
             cover: "👁️",
-            description: "Una distopía que presenta un futuro totalitario donde el gobierno controla todo."
+            description: "Una distopía que presenta un futuro totalitario donde el gobierno controla todo.",
+            generos: "Ciencia Ficción",
         }
     ];
 
@@ -34,7 +37,7 @@ const BookList = ({user, searchQuery}) => {
     }, []);
 
     useEffect(() => {
-        filteredBooks();
+        filterBooks();
     }, [searchQuery, selectedGenre]);
 
     const filterBooks = () => {
@@ -120,7 +123,7 @@ const BookList = ({user, searchQuery}) => {
                     ))}
                 </div>
 
-                {filterBooks.length === 0 && (
+                {filteredBooks.length === 0 && (
                     <div className="no-results">
                         <i className="fas fa-search"></i>
                         <h3>No se encontraron libros</h3>
