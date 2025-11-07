@@ -1,57 +1,80 @@
 import React from "react";
-import { useAuth} from "../context/AuthContext";
-import "./Home.css"; // Archivo de estilos
 
-const Home = ({setCurrentView, searchQuery, setSearchQuery}) => {
-  const { user } = useAuth();
-  
-  const handleSearch = (e) => {
-    if (e.key === 'Enter') {
-      setCurrentView('catalog');
+const Home = ({ setCurrentView = () => {}, searchQuery = "", setSearchQuery = () => {} }) => {
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (typeof setCurrentView === "function") setCurrentView("catalog");
     }
   };
 
   return (
-    <div className="home-container">
-      <h1 className="title">Bienvenido a Nexus Literario</h1>
-      {/* Barra de búsqueda */}
-      <div className="search-bar">
-        <input type="text" 
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        onKeyDown={handleSearch}
-        placeholder="Buscar por título, autor o género"
-        aria-label="Campo de búsqueda de libros"
-        />
-      </div>
+    <div className="container py-5">
+      <section className="bg-dark text-light rounded-3 p-5 mb-4 text-center">
+        <h1 className="display-5">Nexus Literario</h1>
+        <p className="lead">Explora, solicita y gestiona tus lecturas.</p>
 
-      {/* Secciones */}
-      <div className="sections">
-        <div
-          className="section tus-libros"
-          onClick={() => setCurrentView('profile')}
-          aria-label="Ver tus libros"
-        >
-          <i className="fas fa-book"></i>
-          <h3>Tus libros</h3>
-        </div>
-        <div
-        className="section recomendaciones"
-        onClick={() => setCurrentView('recommendations')}
-        aria-label="Ver recomendaciones"
-          >
-            <i className="fas fa-star"></i>
-            <h3>Recomendaciones</h3>
+        <div className="row justify-content-center mt-4">
+          <div className="col-md-8">
+            <form
+              className="input-group"
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (typeof setCurrentView === "function") setCurrentView("catalog");
+              }}
+              role="search"
+              aria-label="Buscar libros"
+            >
+              <input
+                className="form-control"
+                placeholder="Buscar por título, autor o género"
+                value={searchQuery}
+                onChange={(e) => typeof setSearchQuery === "function" && setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                aria-label="Campo de búsqueda de libros"
+              />
+              <button type="submit" className="btn btn-primary">
+                Buscar
+              </button>
+            </form>
           </div>
-          <div
-          className="section generos-mas-leidos"
-          onClick={() => setCurrentView('catalog')}
-          aria-label="Ver géneros más leídos"
-          >
-            <h3>Géneros más leídos</h3>
+        </div>
+      </section>
+
+      <div className="row g-4">
+        <div className="col-md-6">
+          <div className="card h-100">
+            <div className="card-body">
+              <h5 className="card-title">Tus libros</h5>
+              <p className="card-text">Revisa tu biblioteca y solicitudes en tu perfil.</p>
+              <button
+                type="button"
+                className="btn btn-outline-primary"
+                onClick={() => typeof setCurrentView === "function" && setCurrentView("profile")}
+              >
+                Ir a perfil
+              </button>
+            </div>
           </div>
         </div>
-      </div> 
+
+        <div className="col-md-6">
+          <div className="card h-100">
+            <div className="card-body">
+              <h5 className="card-title">Recomendaciones</h5>
+              <p className="card-text">Descubre nuevas lecturas adaptadas a tus intereses.</p>
+              <button
+                type="button"
+                className="btn btn-outline-primary"
+                onClick={() => typeof setCurrentView === "function" && setCurrentView("recommendations")}
+              >
+                Ver recomendaciones
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

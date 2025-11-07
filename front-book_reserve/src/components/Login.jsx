@@ -1,109 +1,98 @@
-import React, { useState } from 'react'
-import { useAuth } from '../../context/AuthContext'
-import './Login.css'
+import React, { useState } from "react";
 
-const Login = ({ onSwitchToRegister }) => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  
-  const { login } = useAuth()
+const Login = ({ onLogin = () => {} }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+  const submit = (e) => {
+    e.preventDefault();
+    if (submitting) return;
 
-    try {
-      await login(email, password)
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
+    const cleanedEmail = (email || "").trim();
+    if (!cleanedEmail) {
+      setError("Introduce un correo válido.");
+      return;
     }
-  }
+
+    setError("");
+    setSubmitting(true);
+
+    // Simulación simple de login para TP8: crear objeto user
+    try {
+      const user = { name: cleanedEmail.split("@")[0], email: cleanedEmail };
+      // Llamada segura al callback del padre
+      if (typeof onLogin === "function") onLogin(user);
+    } catch (err) {
+      setError("Error al iniciar sesión.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
-    <div className="login-container">
-      <div className="login-background">
-        <div className="login-content">
-          <div className="login-card">
-            <div className="login-header">
-              <i className="fas fa-book-open"></i>
-              <h1>Nexus Literario</h1>
-              <p>Inicia sesión en tu cuenta</p>
-            </div>
+    <div className="container py-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card p-4">
+            <h3 className="mb-3">Iniciar sesión</h3>
 
             {error && (
-              <div className="error-message">
-                <i className="fas fa-exclamation-circle"></i>
+              <div className="alert alert-danger" role="alert">
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="login-form">
-              <div className="form-group">
-                <label htmlFor="email">Correo Electrónico</label>
+            <form onSubmit={submit} noValidate>
+              <div className="mb-3">
+                <label htmlFor="login-email" className="form-label">
+                  Correo electrónico
+                </label>
                 <input
+                  id="login-email"
                   type="email"
-                  id="email"
+                  className="form-control"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="tu@email.com"
+                  aria-label="Correo electrónico"
                   required
-                  disabled={loading}
+                  disabled={submitting}
+                  autoComplete="email"
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="password">Contraseña</label>
+              <div className="mb-3">
+                <label htmlFor="login-password" className="form-label">
+                  Contraseña
+                </label>
                 <input
+                  id="login-password"
                   type="password"
-                  id="password"
+                  className="form-control"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  aria-label="Contraseña"
                   required
-                  disabled={loading}
+                  disabled={submitting}
+                  autoComplete="current-password"
                 />
               </div>
 
-              <button 
-                type="submit" 
-                className="btn btn-primary login-btn"
-                disabled={loading}
+              <button
+                type="submit"
+                className="btn btn-primary w-100"
+                disabled={submitting}
+                aria-busy={submitting}
               >
-                {loading ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin"></i>
-                    Iniciando sesión...
-                  </>
-                ) : (
-                  <>
-                    <i className="fas fa-sign-in-alt"></i>
-                    Iniciar Sesión
-                  </>
-                )}
+                {submitting ? "Entrando..." : "Entrar"}
               </button>
             </form>
-
-            <div className="login-footer">
-              <p>¿No tienes una cuenta?</p>
-              <button 
-                type="button" 
-                className="btn btn-outline"
-                onClick={onSwitchToRegister}
-                disabled={loading}
-              >
-                Regístrate aquí
-              </button>
-            </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
