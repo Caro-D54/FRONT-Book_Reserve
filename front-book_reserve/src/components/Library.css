@@ -1,0 +1,10 @@
+.library-hero {
+    padding: 2rem 0;
+    background: #071428;
+    color: #FFF;
+}
+
+.books-grid {
+    display: grid;
+    gap: 1rem;
+}

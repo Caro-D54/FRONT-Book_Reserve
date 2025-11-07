@@ -14,9 +14,10 @@ const Recommendations = ({ user }) => {
       author: "Julio Cortázar",
       genre: "Literatura Contemporánea",
       cover: "🔀",
-      description: "Novela que revolucionó la narrativa hispanoamericana con su estructura no lineal y múltiples finales.",
+      description:
+        "Novela que revolucionó la narrativa hispanoamericana con su estructura no lineal y múltiples finales.",
       reason: "Basado en tu interés por la literatura innovadora",
-      match: 95
+      match: 95,
     },
     {
       id: 2,
@@ -24,9 +25,10 @@ const Recommendations = ({ user }) => {
       author: "Gabriel García Márquez",
       genre: "Realismo Mágico",
       cover: "⚰️",
-      description: "Novela basada en un hecho real que relata el asesinato de Santiago Nasar desde múltiples perspectivas.",
+      description:
+        "Novela basada en un hecho real que relata el asesinato de Santiago Nasar desde múltiples perspectivas.",
       reason: "Porque disfrutaste 'Cien Años de Soledad'",
-      match: 88
+      match: 88,
     },
     {
       id: 3,
@@ -34,9 +36,10 @@ const Recommendations = ({ user }) => {
       author: "Ernesto Sabato",
       genre: "Novela Psicológica",
       cover: "🚇",
-      description: "Profundo análisis psicológico de un pintor obsesionado con una mujer que culmina en tragedia.",
+      description:
+        "Profundo análisis psicológico de un pintor obsesionado con una mujer que culmina en tragedia.",
       reason: "Para explorar narrativas psicológicas intensas",
-      match: 82
+      match: 82,
     },
     {
       id: 4,
@@ -44,9 +47,10 @@ const Recommendations = ({ user }) => {
       author: "Roberto Bolaño",
       genre: "Literatura Contemporánea",
       cover: "🕵️",
-      description: "Episodios de la vida de dos poetas que buscan a una misteriosa escritora desaparecida.",
+      description:
+        "Episodios de la vida de dos poetas que buscan a una misteriosa escritora desaparecida.",
       reason: "Amplía tu conocimiento de autores latinoamericanos",
-      match: 79
+      match: 79,
     },
     {
       id: 5,
@@ -54,9 +58,10 @@ const Recommendations = ({ user }) => {
       author: "Isabel Allende",
       genre: "Realismo Mágico",
       cover: "🏠",
-      description: "Saga familiar que abarca cuatro generaciones en un país latinoamericano sin nombre.",
+      description:
+        "Saga familiar que abarca cuatro generaciones en un país latinoamericano sin nombre.",
       reason: "Similar al realismo mágico que prefieres",
-      match: 76
+      match: 76,
     },
     {
       id: 6,
@@ -64,10 +69,11 @@ const Recommendations = ({ user }) => {
       author: "Ray Bradbury",
       genre: "Ciencia Ficción",
       cover: "🔥",
-      description: "Distopía sobre una sociedad futura donde los libros están prohibidos y son quemados.",
+      description:
+        "Distopía sobre una sociedad futura donde los libros están prohibidos y son quemados.",
       reason: "Complementa tu lectura de '1984'",
-      match: 85
-    }
+      match: 85,
+    },
   ];
 
   const sampleGenres = [
@@ -76,26 +82,29 @@ const Recommendations = ({ user }) => {
     { name: "Literatura Contemporánea", count: 15, trend: "stable" },
     { name: "Novela Psicológica", count: 12, trend: "up" },
     { name: "Distopía", count: 10, trend: "stable" },
-    { name: "Romance", count: 8, trend: "down" }
+    { name: "Romance", count: 8, trend: "down" },
   ];
 
   useEffect(() => {
-    // Simular carga de datos
-    setTimeout(() => {
+    // Simular carga de datos; guardamos el id del timeout para limpiarlo si se desmonta
+    const t = setTimeout(() => {
       setRecommendations(sampleRecommendations);
       setPopularGenres(sampleGenres);
       setLoading(false);
     }, 1000);
+
+    return () => clearTimeout(t);
   }, []);
 
   const getTrendIcon = (trend) => {
+    // Devuelve objeto con clase y texto para accesibilidad
     switch (trend) {
-      case 'up':
-        return 'fas fa-arrow-up trend-up';
-      case 'down':
-        return 'fas fa-arrow-down trend-down';
+      case "up":
+        return { className: "fas fa-arrow-up trend-up", title: "tendencia en alza" };
+      case "down":
+        return { className: "fas fa-arrow-down trend-down", title: "tendencia a la baja" };
       default:
-        return 'fas fa-minus trend-stable';
+        return { className: "fas fa-minus trend-stable", title: "tendencia estable" };
     }
   };
 
@@ -103,8 +112,8 @@ const Recommendations = ({ user }) => {
     return (
       <div className="recommendations-container">
         <div className="container">
-          <div className="loading">
-            <i className="fas fa-book-open fa-spin"></i>
+          <div className="loading" role="status" aria-live="polite">
+            <i className="fas fa-book-open fa-spin" aria-hidden="true"></i>
             <h3>Buscando recomendaciones para ti...</h3>
           </div>
         </div>
@@ -122,92 +131,114 @@ const Recommendations = ({ user }) => {
 
         <div className="recommendations-layout">
           {/* Columna principal - Recomendaciones */}
-          <div className="recommendations-main">
+          <main className="recommendations-main" role="main">
             <h2>
-              <i className="fas fa-star"></i>
-              Libros Recomendados
+              <i className="fas fa-star" aria-hidden="true"></i> Libros Recomendados
             </h2>
-            
-            <div className="recommendations-grid">
-              {recommendations.map(book => (
-                <div key={book.id} className="recommendation-card">
-                  <div className="recommendation-badge">
+
+            <div className="recommendations-grid" role="list">
+              {(recommendations || []).map((book) => (
+                <article key={book.id} className="recommendation-card" role="listitem" aria-labelledby={`rec-title-${book.id}`}>
+                  <div className="recommendation-badge" aria-hidden>
                     <span className="match-score">{book.match}%</span>
                     <span className="match-text">de coincidencia</span>
                   </div>
-                  
+
                   <div className="book-content">
-                    <div className="book-cover">{book.cover}</div>
+                    <div className="book-cover" aria-hidden>
+                      {book.cover}
+                    </div>
+
                     <div className="book-details">
-                      <h3>{book.title}</h3>
+                      <h3 id={`rec-title-${book.id}`}>{book.title}</h3>
                       <p className="book-author">{book.author}</p>
                       <p className="book-genre">{book.genre}</p>
                       <p className="book-description">{book.description}</p>
                       <p className="recommendation-reason">
-                        <i className="fas fa-lightbulb"></i>
-                        {book.reason}
+                        <i className="fas fa-lightbulb" aria-hidden="true"></i> {book.reason}
                       </p>
                     </div>
                   </div>
-                  
+
                   <div className="book-actions">
-                    <button className="btn btn-primary">
-                      <i className="fas fa-file-pdf"></i>
-                      Solicitar Acceso
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={() => {
+                        if (!user) {
+                          // Mejor reemplazar por un modal o toast en producción
+                          alert("Inicia sesión para solicitar acceso");
+                          return;
+                        }
+                        alert(`Solicitud enviada para "${book.title}" (simulado).`);
+                      }}
+                      disabled={!user}
+                      aria-label={user ? `Solicitar acceso a ${book.title}` : "Inicia sesión para solicitar acceso"}
+                      title={user ? `Solicitar acceso a ${book.title}` : "Inicia sesión para solicitar acceso"}
+                    >
+                      <i className="fas fa-file-pdf" aria-hidden="true"></i> Solicitar Acceso
                     </button>
-                    <button className="btn btn-outline">
-                      <i className="fas fa-bookmark"></i>
-                      Guardar
+
+                    <button
+                      type="button"
+                      className="btn btn-outline"
+                      onClick={() => alert(`Guardado "${book.title}" (simulado).`)}
+                      aria-label={`Guardar ${book.title}`}
+                      title="Guardar"
+                    >
+                      <i className="fas fa-bookmark" aria-hidden="true"></i> Guardar
                     </button>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
-          </div>
+          </main>
 
           {/* Sidebar - Géneros populares */}
-          <div className="recommendations-sidebar">
+          <aside className="recommendations-sidebar" aria-labelledby="sidebar-title">
             <div className="sidebar-section">
-              <h3>
-                <i className="fas fa-chart-line"></i>
-                Géneros Populares
+              <h3 id="sidebar-title">
+                <i className="fas fa-chart-line" aria-hidden="true"></i> Géneros Populares
               </h3>
-              <div className="genres-list">
-                {popularGenres.map((genre, index) => (
-                  <div key={genre.name} className="genre-item">
-                    <div className="genre-info">
-                      <span className="genre-rank">#{index + 1}</span>
-                      <span className="genre-name">{genre.name}</span>
-                      <i className={getTrendIcon(genre.trend)}></i>
+
+              <div className="genres-list" role="list">
+                {(popularGenres || []).map((genre, index) => {
+                  const icon = getTrendIcon(genre.trend);
+                  return (
+                    <div key={genre.name} className="genre-item" role="listitem" aria-label={`${genre.name}, ${genre.count} libros, ${icon.title}`}>
+                      <div className="genre-info">
+                        <span className="genre-rank">#{index + 1}</span>
+                        <span className="genre-name">{genre.name}</span>
+                        <i className={icon.className} title={icon.title} aria-hidden="true"></i>
+                      </div>
+                      <span className="genre-count">{genre.count} libros</span>
                     </div>
-                    <span className="genre-count">{genre.count} libros</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
             <div className="sidebar-section">
               <h3>
-                <i className="fas fa-trophy"></i>
-                Tus Estadísticas
+                <i className="fas fa-trophy" aria-hidden="true"></i> Tus Estadísticas
               </h3>
-              <div className="user-stats">
+              <div className="user-stats" role="group" aria-label="Estadísticas de usuario">
                 <div className="stat-item">
-                  <i className="fas fa-book"></i>
+                  <i className="fas fa-book" aria-hidden="true"></i>
                   <div>
                     <strong>5</strong>
                     <span>Libros leídos este mes</span>
                   </div>
                 </div>
                 <div className="stat-item">
-                  <i className="fas fa-clock"></i>
+                  <i className="fas fa-clock" aria-hidden="true"></i>
                   <div>
                     <strong>12h</strong>
                     <span>Tiempo de lectura</span>
                   </div>
                 </div>
                 <div className="stat-item">
-                  <i className="fas fa-star"></i>
+                  <i className="fas fa-star" aria-hidden="true"></i>
                   <div>
                     <strong>3</strong>
                     <span>Géneros favoritos</span>
@@ -217,16 +248,16 @@ const Recommendations = ({ user }) => {
             </div>
 
             {!user && (
-              <div className="sidebar-section login-prompt">
-                <i className="fas fa-user-plus"></i>
+              <div className="sidebar-section login-prompt" role="region" aria-live="polite">
+                <i className="fas fa-user-plus" aria-hidden="true"></i>
                 <h4>¿Aún no tienes cuenta?</h4>
                 <p>Regístrate para recibir recomendaciones personalizadas basadas en tus lecturas.</p>
-                <button className="btn btn-primary">
+                <button type="button" className="btn btn-primary" onClick={() => alert("Ir a registro (simulado)")}>
                   Crear Cuenta
                 </button>
               </div>
             )}
-          </div>
+          </aside>
         </div>
       </div>
     </div>
