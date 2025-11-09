@@ -1,30 +1,107 @@
 import React from "react";
+import PropTypes from "prop-types";
+import "./BookCard.css";
 
-const BookCard = ({ book, onRequest }) => (
-    <article className="book-card" aria-labelledby={'title-${book.id}'}>
-        <div className="book-cover" aria-hidden>
-            {book.cover || "📙"}
-        </div>
-        <div className="book-body">
-            <h3 id={`title-${book.id}`}>{book.title}</h3>
-            <p className="book-author">{book.author}</p>
-            <p className="book-meta">{book.genre}. {book.year}</p>
-            <p className="book-description">{book.description}</p>
-            <div className="book-actions">
-                <button
-                className="btn btn-ghost"
-                type="button">
-                    Ver detalles
-                </button>
-                <button
-                className="btn btn-primary-elegant"
-                type="button"
-                onClick={() => onRequest(book)}>
-                    Solicitar acceso
-                </button>
+const BookCard = ({ book = {}, onRequest = () => {}, onView = () => {} }) => {
+    const {
+        id = "unknown",
+        title = "Título desconocido",
+        author = "Autor desconocido",
+        cover = "null",
+        genre = "",
+        year = "",
+        description = "",
+    } = book;
+
+    const labelledBy = `title-${id}`;
+    const isImageUrl = 
+    typeof cover === "string" && /^(https?:\/\/)/i.test(cover);
+
+    return (
+        <article className="card h-100 book-card" aria-labelledby={labelledBy}>
+            <div className="card-body d-flex flex-column">
+                <div className="d-flex align-items-start gap-3">
+                    <div
+                    className="book-cover flex-shrink-0"
+                    aria-hidden={cover ? "false" : "true"}
+                    style={{width: 96, height: 128}}
+                    >
+                        {cover ? (
+                            isImageUrl ? (
+                                <img
+                                src={cover}
+                                alt={'Portada de ${title}'}
+                                className="book-cover-img img-fluid rounded"
+                                loading="lazy"
+                                style={{width: "100%", height: "100%", objectFit: "cover"}}
+                            />
+                            ) : (
+                                <span className="book-cover-fallback fs-1" aria-hidden="true">
+                                    {cover}
+                                </span>
+                            )
+                            ) : (
+                                <span className="book-cover-fallback fs-1" aria-hidden="true">
+                                    📖
+                                </span>
+                            )}
+                        </div>
+                        <div className="book-meta" style={{minWidth: 0}}>
+                            <h3 id={labelledBy} className="card-title h6 mb-1 text-truncate">
+                                {title}
+                            </h3>
+                            <p className="card-text text-muted mb-1" style={{fontSize: ".92rem"}}>
+                                {author}
+                            </p>
+                            {(genre || year) && (
+                                <p className="text-warning mb-2" style={{fontSize: ".85rem"}}>
+                                    {genre}
+                                    {genre && year ? " · " : ""}
+                                    {year}
+                                </p>
+                            )}
+                            {description && (
+                                <p className="text-secondary small mb-2" style={{WebkitLineClamp: 3, display: "-webkit-box", WebkitBoxOrient: "vertical", overflow: "hidden"}}>
+                                {description}
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                    <div className="mt-auto d-flex gap-2">
+                        <button
+                        type="button"
+                        className="btn btn-outline-secondary flex-grow-1"
+                        aria-label={'Ver detalles de ${title}'}
+                        onClick={() => onView(book)}
+                        >
+                            Ver Detalles
+                        </button>
+                        <button
+                        type="button"
+                        className="btn btn-primary flex-grow-1"
+                        aria-label={'Solicitar acceso a ${title}'}
+                        onClick={() => onRequest(book)}
+                        >
+                            Solicitar Acceso
+                        </button>
+                    </div>
             </div>
-        </div>
-    </article>
-);
+        </article>
+    );
+};
+
+BookCard.propTypes = {
+    book: PropTypes.shape({
+        id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        title: PropTypes.string,
+        author: PropTypes.string,
+        cover: PropTypes.string,
+        genre: PropTypes.string,
+        year: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        description: PropTypes.string,
+    }),
+    onRequest: PropTypes.func,
+    onView: PropTypes.func,
+};
 
 export default BookCard;

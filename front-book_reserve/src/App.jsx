@@ -16,38 +16,47 @@ function App() {
 
   const[searchQuery, setSearchQuery] = useState("");
 
+  const handleNavigate = (view) => {
+    setCurrentView((p) => (p === view ? p : view));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+    handleNavigate('profile');
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    handleNavigate('home');
+  }
+
+  const handleRegister = (userData) => {
+    setUser(userData);
+    handleNavigate('profile');  
+  };
+
   const renderView = () => {
     switch (currentView) {
       case 'home':
         return (
         <Home
-        setCurrentView={setCurrentView}
+        onNavigate={handleNavigate}
         searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery} 
+        setsearchQuery={setSearchQuery}
         />
         );
       case 'catalog':
         return <BookList user={user} searchQuery={searchQuery} />;
       case 'login':
-        return (
-        <Login 
-        onLogin={(u) => { 
-          setUser(u); 
-          setCurrentView('profile'); 
-        }} 
-        />
-      );
+        return 
+        <Login onLogin={handleLogin} onNavigate={handleNavigate} />;
+
       case 'register':
-        return (
-        <Register 
-        onRegister={(u) => { 
-          setUser(u); 
-          setCurrentView('profile'); 
-        }} 
-        />
-      );
+        return <Register onRegister={handleRegister} onNavigate={handleNavigate} />;
+        
       case 'profile':
-        return <Profile user={user} />;
+        return <Profile user={user} requests={user?.requests || []} onNavigate={handleNavigate}/>;
       case 'recommendations':
         return <Recommendations/>;
       default:
@@ -64,14 +73,10 @@ function App() {
     <div className="d-flex flex-column min-vh-100">
       <Header 
         user={user}
-        setUser={setUser}
-        onNavigate={setCurrentView}
+        onNavigate={handleNavigate}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
-        onLogout={() => {
-          setUser(null);
-        setCurrentView('home');
-        }}
+        onLogout={handleLogout}
       />
       <main className="flex-grow-1">
         {renderView()}

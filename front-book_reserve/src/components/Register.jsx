@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
+import PropTypes from "prop-types";
 import "./Register.css";
 
 const Register = ({ onRegister = () => {}, onSwitchToLogin = () => {} }) => {
@@ -23,7 +24,7 @@ const Register = ({ onRegister = () => {}, onSwitchToLogin = () => {} }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((p) => ({ ...p, [name]: value }));
   };
 
   const validate = () => {
@@ -72,120 +73,149 @@ const Register = ({ onRegister = () => {}, onSwitchToLogin = () => {} }) => {
   };
 
   return (
-    <div className="register-container">
-      <div className="register-background">
-        <div className="register-content">
-          <div className="register-card" role="region" aria-label="Registro">
-            <div className="register-header">
-              <i className="fas fa-user-plus" aria-hidden="true"></i>
-              <h1>Crear Cuenta</h1>
-              <p>Únete a Nexus Literario</p>
-            </div>
-
-            {error && (
-              <div className="error-message" role="alert" aria-live="assertive">
-                <i className="fas fa-exclamation-circle" aria-hidden="true"></i>
-                <span>{error}</span>
-              </div>
-            )}
-
-            <form onSubmit={handleSubmit} className="register-form" noValidate>
-              <div className="form-group">
-                <label htmlFor="name">Nombre Completo</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Tu nombre completo"
-                  disabled={loading}
-                  autoComplete="name"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="email">Correo Electrónico</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="tu@email.com"
-                  required
-                  disabled={loading}
-                  autoComplete="email"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="password">Contraseña</label>
-                <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Mínimo 6 caracteres"
-                  required
-                  disabled={loading}
-                  autoComplete="new-password"
-                />
-                <small>La contraseña debe tener al menos 6 caracteres</small>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="confirmPassword">Confirmar Contraseña</label>
-                <input
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  placeholder="Repite tu contraseña"
-                  required
-                  disabled={loading}
-                  autoComplete="new-password"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary register-btn"
-                disabled={loading}
-                aria-busy={loading}
-              >
-                {loading ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin" aria-hidden="true"></i>
-                    Crear cuenta...
-                  </>
-                ) : (
-                  <>
-                    <i className="fas fa-user-plus" aria-hidden="true"></i>
+    <div className="register-page py-5">
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-12 col-sm-10 col-md-8 col-lg-6">
+            <div className="card shadow-sm">
+              <div className="card-body" p-4>
+                <header className="mb-3 text-center">
+                  <h1 className="h5 mb-1">
                     Crear Cuenta
-                  </>
+                  </h1>
+                  <p className="text-muted small mb-0">
+                    Únete a Nexus Literario
+                  </p>
+                </header>
+                {error && (
+                  <div className="alert alert-danger" role="alert" aria-live="assertive">
+                    {error}
+                  </div>
                 )}
-              </button>
-            </form>
-
-            <div className="register-footer">
-              <p>¿Ya tienes una cuenta?</p>
-              <button
-                type="button"
-                className="btn btn-outline"
-                onClick={() => typeof onSwitchToLogin === "function" && onSwitchToLogin()}
-                disabled={loading}
-              >
-                Inicia sesión aquí
-              </button>
+                <form onSubmit={handleSubmit} noValidate>
+                  <div className="mb-3">
+                    <label htmlFor="name" className="form-label">
+                      Nombre Completo
+                    </label>
+                    <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    className="form-control"
+                    placeholder="Tu Nombre Completo"
+                    value={formData.name}
+                    onChange={handleChange}
+                    disabled={loading}
+                    autoComplete="name"
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="email" className="form-label">
+                      Correo Electrónico
+                    </label>
+                    <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    className="form-control"
+                    placeholder="tu@email.com"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    disabled={loading}
+                    autoComplete="email"
+                    aria-required="true"
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="password" className="form-label">
+                      Contraseña
+                    </label>
+                    <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    className="form-control"
+                    placeholder="Mínimo 6 caracteres"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    disabled={loading}
+                    autoComplete="new-password"
+                    aria-required="true"
+                    minLength={6}
+                    />
+                    <div className="form-text">
+                      La contraseña debe tener al menos 6 caracteres
+                    </div>
+                    <div className="mb-3">
+                      <label htmlFor="confirmPassword" className="form-label">
+                        Confirmar Contraseña
+                      </label>
+                      <input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type="password"
+                      className="form-control"
+                      placeholder="Repite tu contraseña"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      required
+                      disabled={loading}
+                      autoComplete="new-password"
+                      aria-required="true"
+                      />
+                    </div>
+                    <div className="d-grid gap-2">
+                      <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={loading}
+                        aria-busy={loading}
+                        >
+                          {loading ? (
+                            <>
+                            <i className="fas fa-spinner fa-spin me-2" aria-hidden="true"></i>
+                            Creando cuenta...
+                            </>
+                          ) : (
+                            <>
+                            <i className="fas fa-user-plus me-2" aria-hidden="true"></i>
+                            Crear Cuenta
+                            </>
+                          )}
+                        </button>
+                    </div>
+                  </div>
+                </form>
+                <footer className="mt-3 text-center">
+                  <small className="text-muted">
+                    ¿Ya tienes una cuenta?{" "}
+                    <button
+                      type="button"
+                      className="btn btn-link p-0 align-baseline"
+                      onClick={() => typeof onSwitchToLogin === 'function' && onSwitchToLogin}
+                      disabled={loading}
+                      >
+                        Inicia sesión aquí
+                    </button>
+                  </small>
+                </footer>
+              </div>
+            </div>
+            <div className="text-center text-muted small mt-3">
+              Al registrarte aceptas terminos y condiciones
             </div>
           </div>
         </div>
       </div>
     </div>
   );
+};
+
+Register.propTypes = {
+  onRegister: PropTypes.func,
+  onSwitchToLogin: PropTypes.func,
 };
 
 export default Register;
