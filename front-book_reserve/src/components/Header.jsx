@@ -1,5 +1,6 @@
 import React from "react";
 import "./Library.css";
+import logo from "../assets/Logo_3d.png";
 
 const Header = ({ user, onNavigate = () => {}, onLogout = () => {}, searchQuery = "", setSearchQuery = () => {} }) => {
   return (
@@ -8,7 +9,8 @@ const Header = ({ user, onNavigate = () => {}, onLogout = () => {}, searchQuery 
         <div className="header-content">
           <div className="logo" role="banner">
             <i className="fas fa-book-open" aria-hidden="true" />
-            <h1>Nexus Literario</h1>
+            <img src={logo} alt="Logo de Nexus Literario" style={{ width: "50px" }} />
+            <h1 className="mb-0">Nexus Literario</h1>
           </div>
 
           <nav aria-label="Main navigation">
@@ -16,23 +18,22 @@ const Header = ({ user, onNavigate = () => {}, onLogout = () => {}, searchQuery 
               <li><button className="btn btn-link text-decoration-none text-reset" onClick={() => onNavigate("home")}>Inicio</button></li>
               <li><button className="btn btn-link text-decoration-none text-reset" onClick={() => onNavigate("catalog")}>Catálogo</button></li>
               <li><button className="btn btn-link text-decoration-none text-reset" onClick={() => onNavigate("profile")}>Mi Perfil</button></li>
-              <li><button className="btn btn-link text-decoration-none text-reset" onClick={() => onNavigate("recommendations")}>Recomendaciones</button></li>
+              <li><button className="btn btn-link text-decoration-none text-reset" onClick={() => onNavigate("help")}>Ayuda</button></li>
             </ul>
           </nav>
 
           <div className="user-actions">
-            <input
+            {/*<input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="form-control"
-              style={{ maxWidth: 220 }}
-              placeholder="Buscar..."
+              placeholder="Buscar por título, autor o género..."
               aria-label="Buscar"
-            />
+            />*/}
             {user ? (
               <>
-                <span className="text-light">{user.name}</span>
-                <button className="btn btn-outline" onClick={() => { onLogout(); }}>Salir</button>
+                <span className="text-muted ms-2">{user.name}</span>
+                <button className="btn btn-outline ms-2" onClick={() => { onLogout(); }}>Salir</button>
               </>
             ) : (
               <>

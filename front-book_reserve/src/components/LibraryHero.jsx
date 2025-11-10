@@ -6,15 +6,16 @@ const LibraryHero = ({ searchQuery = "", setSearchQuery = () => {}, onSearch = n
   const handleSubmit = (e) => {
     e.preventDefault();
     if (typeof onSearch === "function") onSearch(searchQuery);
-    // otherwise parent uses searchQuery directly
   };
 
   return (
     <section
       className="hero"
       style={{
-        backgroundImage: `linear-gradient(rgba(5,10,48,0.85), rgba(5,10,48,0.9)), url(${bg})`,
-    }}
+        backgroundImage: `linear-gradient(rgba(5,10,30,0.85), rgba(5,10,30,0.9)), url(${bg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
       <div className="container">
         <h2>Biblioteca Virtual Nexus Literario</h2>
