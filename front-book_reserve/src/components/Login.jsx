@@ -1,93 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
+import "./Library.css";
 
-const Login = ({ onLogin = () => {} }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [submitting, setSubmitting] = useState(false);
+const Login = ({ onLogin = () => {}, onNavigate = () => {} }) => {
+  const auth = useAuth();
+  const login = auth?.login ?? (async (email) => ({ name: "Demo", email }));
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const mountedRef = useRef(true);
 
-  const submit = (e) => {
+  useEffect(() => { mountedRef.current = true; return () => { mountedRef.current = false; }; }, []);
+
+  const handleChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (submitting) return;
-
-    const cleanedEmail = (email || "").trim();
-    if (!cleanedEmail) {
-      setError("Introduce un correo válido.");
-      return;
-    }
-
-    setError("");
-    setSubmitting(true);
-
-    // Simulación simple de login para TP8: crear objeto user
+    if (loading) return;
+    setError(""); setLoading(true);
     try {
-      const user = { name: cleanedEmail.split("@")[0], email: cleanedEmail };
-      // Llamada segura al callback del padre
-      if (typeof onLogin === "function") onLogin(user);
+      const user = await login(form.email.trim(), form.password);
+      if (user && typeof onLogin === "function") onLogin(user);
     } catch (err) {
-      setError("Error al iniciar sesión.");
-    } finally {
-      setSubmitting(false);
-    }
+      if (mountedRef.current) setError(err?.message || "Error al iniciar sesión.");
+    } finally { if (mountedRef.current) setLoading(false); }
   };
 
   return (
-    <div className="container py-5">
+    <div className="container py-4">
       <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="card p-4">
-            <h3 className="mb-3">Iniciar sesión</h3>
+        <div className="col-12 col-sm-10 col-md-6 col-lg-5">
+          <div className="card shadow-sm">
+            <div className="card-body p-4">
+              <h1 className="h5">Iniciar Sesión</h1>
+              <p className="text-muted small">Accede a tu cuenta</p>
+              {error && <div className="alert alert-danger">{error}</div>}
+              <form onSubmit={handleSubmit} noValidate>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">Correo electrónico</label>
+                  <input id="email" name="email" type="email" className="form-control" value={form.email} onChange={handleChange} required autoComplete="email" />
+                </div>
 
-            {error && (
-              <div className="alert alert-danger" role="alert">
-                {error}
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">Contraseña</label>
+                  <input id="password" name="password" type="password" className="form-control" value={form.password} onChange={handleChange} required autoComplete="current-password" />
+                </div>
+
+                <div className="d-grid gap-2">
+                  <button className="btn btn-primary" type="submit" disabled={loading}>{loading ? "Entrando..." : "Entrar"}</button>
+                </div>
+              </form>
+
+              <div className="mt-3 text-center">
+                <small className="text-muted">¿No tienes cuenta? <button className="btn btn-link p-0" onClick={() => onNavigate("register")}>Regístrate</button></small>
               </div>
-            )}
-
-            <form onSubmit={submit} noValidate>
-              <div className="mb-3">
-                <label htmlFor="login-email" className="form-label">
-                  Correo electrónico
-                </label>
-                <input
-                  id="login-email"
-                  type="email"
-                  className="form-control"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  aria-label="Correo electrónico"
-                  required
-                  disabled={submitting}
-                  autoComplete="email"
-                />
-              </div>
-
-              <div className="mb-3">
-                <label htmlFor="login-password" className="form-label">
-                  Contraseña
-                </label>
-                <input
-                  id="login-password"
-                  type="password"
-                  className="form-control"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  aria-label="Contraseña"
-                  required
-                  disabled={submitting}
-                  autoComplete="current-password"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary w-100"
-                disabled={submitting}
-                aria-busy={submitting}
-              >
-                {submitting ? "Entrando..." : "Entrar"}
-              </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>

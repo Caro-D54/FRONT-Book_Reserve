@@ -117,18 +117,21 @@
 
 /* Hero */
 .nexus .hero {
+  background-image: "../assets/Library_books.jpg";
   color: var(--beige);
   padding: 5rem 0;
   text-align: center;
 }
 
 .nexus .hero h2 {
+  background-image: "../assets/Library_books.jpg";
   font-size: 2.8rem;
   margin-bottom: 1rem;
   font-weight: 700;
 }
 
 .nexus .hero p {
+  background-image: "../assets/Library_books.jpg";
   font-size: 1.15rem;
   max-width: 720px;
   margin: 0 auto 1.75rem;
