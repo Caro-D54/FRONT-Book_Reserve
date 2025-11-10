@@ -23,13 +23,7 @@ const Header = ({ user, onNavigate = () => {}, onLogout = () => {}, searchQuery 
           </nav>
 
           <div className="user-actions">
-            {/*<input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="form-control"
-              placeholder="Buscar por título, autor o género..."
-              aria-label="Buscar"
-            />*/}
+            
             {user ? (
               <>
                 <span className="text-muted ms-2">{user.name}</span>

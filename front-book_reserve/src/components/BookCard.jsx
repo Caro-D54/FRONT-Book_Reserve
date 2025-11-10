@@ -2,30 +2,43 @@ import React from "react";
 import "./Library.css";
 
 const BookCard = ({ book = {}, onRequest = () => {}, onView = () => {} }) => {
-  const { title = "Sin título", author = "Desconocido", cover = null, year = "" } = book;
+  const { id, title = "Sin título", author = "Desconocido", cover = null, year = "" } = book;
   const isImg = typeof cover === "string" && (cover.startsWith("http") || cover.startsWith("/"));
 
   return (
-    <article className="card h-100 book-card" aria-labelledby={`title-${book.id || title}`}>
-      <div className="book-cover" aria-hidden>
-        {isImg ? (
-          <img src={cover} alt={`Portada de ${title}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-        ) : (
-          <div style={{ padding: 16, fontSize: 40 }}>📚</div>
-        )}
-      </div>
-
-      <div className="book-info">
-        <h3 className="book-title" id={`title-${book.id || title}`}>{title}</h3>
-        <div className="book-author">{author} {year ? `· ${year}` : ""}</div>
-
-        <div className="book-actions mt-3 d-flex">
-          <button className="btn btn-outline-secondary me-2 flex-fill" onClick={() => onView(book)}>Ver detalles</button>
-          <button className="btn btn-primary flex-fill" onClick={() => onRequest(book)}>Solicitar acceso</button>
-        </div>
-      </div>
-    </article>
-  );
+    <article className="card book-card h-100" aria-labelledby={`book-title-${id || title}`}>
+        <div className="row g-0 h-100 align-items-stretch">
+            <div className="col-auto book-thumb-wrap">
+                {isImg ? (
+                    <img src={cover} alt={'Portada de ${title}'} className="book-thumb"/>
+                    ) : (
+                        <div className="book-thumb placeholder">📚</div>
+                    )}
+                    </div>
+                    <div className="col book-body d-flex flex-column">
+                        <div>
+                            <h3 id={"book-title-${id || title}"} className="book-title">
+                                {title}
+                            </h3>
+                            <div className="book-author text-muted">
+                                {author}{year ? ' . ${year}' : ""}
+                            </div>
+                            <p className="book-meta text-muted small mt-2">
+                                Género: {book.generos || "-"}
+                            </p>
+                        </div>
+                        <div className="mt-auto d-flex gap-2 book-actions">
+                            <button className="btn btn-outline-secondary flex-fill" onClick={() => onRequest(book)}>
+                                Solicitar acceso
+                            </button>
+                        <button className="btn btn-primary flex-fill" onClick={() => onView(book)}>
+                            Ver Detalles
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </article>
+    );
 };
 
 export default BookCard;
