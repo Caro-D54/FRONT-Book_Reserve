@@ -1,13 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
-import "./Recommendations.css"; // opcional: overrides
+import './Library.css'; // opcional: overrides
 
 const Recommendations = ({ features = null }) => {
   const defaultFeatures = [
     {
       icon: "fas fa-search",
       title: "Búsqueda Avanzada",
-      description: "Encuentra títulos por género, autor o palabras clave de manera rápida y eficiente.",
+      description: "Encuentra títulos por género, autor o palabras clave de manera rápida.",
     },
     {
       icon: "fas fa-file-pdf",
@@ -29,22 +28,22 @@ const Recommendations = ({ features = null }) => {
   const list = Array.isArray(features) && features.length ? features : defaultFeatures;
 
   return (
-    <section className="features py-5" aria-labelledby="features-title">
+    <section className="features py-5">
       <div className="container">
         <div className="section-title text-center mb-4">
-          <h2 id="features-title" className="h3">Funcionalidades Principales</h2>
+          <h2>Funciones Principales</h2>
           <p className="text-muted">Descubre todo lo que nuestra biblioteca virtual tiene para ofrecerte</p>
         </div>
 
-        <div className="row g-4 features-grid" role="list">
+        <div className="row g-4 features-grid">
           {list.map((f, i) => (
-            <div key={i} className="col-12 col-sm-6 col-lg-3" role="listitem">
-              <div className="card h-100 border-0 shadow-sm feature-card">
+            <div key={i} className="col-12 col-sm-6 col-lg-3">
+              <div className="card h-100 feature-card">
                 <div className="card-body d-flex flex-column align-items-start">
                   <div className="feature-icon mb-3">
-                    <i className={`${f.icon} fa-2x text-primary`} aria-hidden="true"></i>
+                    <i className={`${f.icon} fa-2x text-primary`} aria-hidden="true"/>
                   </div>
-                  <h3 className="h6 card-title">{f.title}</h3>
+                  <h3 className="h6">{f.title}</h3>
                   <p className="card-text text-muted mb-0">{f.description}</p>
                 </div>
               </div>
@@ -54,16 +53,6 @@ const Recommendations = ({ features = null }) => {
       </div>
     </section>
   );
-};
-
-Recommendations.propTypes = {
-  features: PropTypes.arrayOf(
-    PropTypes.shape({
-      icon: PropTypes.string,
-      title: PropTypes.string,
-      description: PropTypes.string,
-    })
-  ),
 };
 
 export default Recommendations;

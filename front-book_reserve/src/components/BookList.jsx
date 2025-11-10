@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BookCard from "./BookCard";           // Asegúrate que existe en ./BookCard.jsx
 import LibraryHero from "./LibraryHero";     // Opcional: si no lo usas, reemplaza por un <div>
-import "./BookList.css";
+import "./Library.css";
 
 const BookList = ({ user, searchQuery = "" }) => {
   const [books, setBooks] = useState([]);
@@ -115,91 +115,51 @@ const BookList = ({ user, searchQuery = "" }) => {
   const resultsLabel = `${filteredBooks.length} libro${filteredBooks.length !== 1 ? "s" : ""} encontrado${filteredBooks.length !== 1 ? "s" : ""}`;
 
   return (
-    <LibraryHero>
-      <div className="book-list-container container">
-        <div className="filters d-flex align-items-center justify-content-between mb-3">
-          <div className="filter-group d-flex align-items-center gap-2">
-            <label htmlFor="genre-select" className="mb-0">Filtrar por género:</label>
-            <select
-              id="genre-select"
-              value={selectedGenre}
-              onChange={(e) => setSelectedGenre(e.target.value)}
-              aria-label="Seleccionar género"
-              className="form-select"
-              style={{ maxWidth: 220 }}
-            >
-              {generos.map((genre) => (
-                <option key={genre} value={genre}>
-                  {genre}
-                </option>
-              ))}
+    <>
+      <div className="container py-4">
+        <div className="section-title">
+          <h2 className="Catálogo de libros"></h2>
+          <p>Explora nuestra colección de libros disponibles</p>
+        </div>
+        <div className="filter-bar mb-3 d-flex align-items-center justify-content-between">
+          <div className="d-flex gap-2">
+            <select className="form-select" value={selectedGenre} onChange={(e) => setSelectedGenre(e.target.value)} aria-label="Seleccionar género" style={{maxWidth: 220}}>
+              {generos.map((g) => <option key={g} value={g}>{g}</option>)}
             </select>
           </div>
-
           <div className="results-count text-muted" aria-live="polite">
-            {resultsLabel}
+            {filteredBooks.length} libro{filteredBooks.length !== 1 ? "s" : ""} encontrado{filteredBooks.length !== 1 ? "s" : ""}
           </div>
-        </div>
-
-        <div className="books-grid row g-4" role="list">
-          {filteredBooks.map((book) => (
-            <div key={book.id} className="col-12 col-sm-6 col-md-4" role="listitem">
-              {/* Recomendado: extraer BookCard para mantener BookList limpio */}
-              {BookCard ? (
-                <BookCard book={book} onRequest={handleRequestAccess} />
-              ) : (
-                <article className="book-card p-3 h-100 d-flex flex-column">
-                  <div className="book-cover mb-3" aria-hidden>{book.cover}</div>
-                  <div className="book-info flex-grow-1">
-                    <h3 id={`title-${book.id}`}>{book.title}</h3>
-                    <p className="book-author text-muted">{book.author}</p>
-                    <p className="book-genre text-warning">{book.generos}{book.year ? ` · ${book.year}` : ""}</p>
-                    <p className="book-description text-secondary">{book.description}</p>
-                  </div>
-                  <button
-                    className="btn btn-primary mt-3"
-                    onClick={() => handleRequestAccess(book)}
-                    aria-label={user ? `Solicitar acceso a ${book.title}` : "Inicia sesión para solicitar acceso"}
-                    disabled={!user}
-                  >
-                    <i className="fas fa-file-pdf" aria-hidden></i> Solicitar Acceso
-                  </button>
-                </article>
-              )}
+          <div className="row g-4 books-grid" role="list">
+            {filteredBooks.map((book) => (
+              <div key={book.id} className="col-12 col-sm-6 col-md-4" role="listitem">
+                <BookCard book={book} onRequest={handleRequestAccess} onView={() => {}}/>
+              </div>
+            ))}
+          </div>
+          {filteredBooks.length === 0 && (
+            <div className="no-results mt-4" role="status">
+              <h3>No se encontraron libros</h3>
+              <p>Intenta con otro término de búsqueda</p>
             </div>
-          ))}
+          )}
         </div>
-
-        {filteredBooks.length === 0 && (
-          <div className="no-results mt-4" role="status">
-            <i className="fas fa-search" aria-hidden></i>
-            <h3>No se encontraron libros</h3>
-            <p>Intenta con otro término de búsqueda</p>
-          </div>
-        )}
-
         {showRequestModal && (
-          <div className="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-            <div className="modal">
+          <div className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <div className="modal-content">
               <div className="modal-header d-flex justify-content-between align-items-center">
                 <h3 id="modal-title">Solicitar Acceso</h3>
-                <button className="close-btn btn btn-sm" onClick={() => setShowRequestModal(false)} aria-label="Cerrar diálogo">
-                  <i className="fas fa-times" aria-hidden></i>
-                </button>
+                <button className="btn-close" onClick={() => setShowRequestModal(false)} aria-label="Cerrar"></button>
               </div>
-
               <div className="modal-body">
                 <p>Estás solicitando acceso para leer:</p>
-
-                <div className="book-preview d-flex gap-3 align-items-center">
-                  <span className="book-cover-small" aria-hidden>{selectedBook?.cover}</span>
-                  <div>
-                    <strong>{selectedBook?.title}</strong>
+                <div className="d-flex gap-3 align-items-center">
+                  <div className="book-cover-small" aria-hidden>{selectedBook?.cover}</div>
+                  <div><strong>{selectedBook?.title}</strong>
                     <br />
                     <em>{selectedBook?.author}</em>
                   </div>
                 </div>
-
                 <div className="form-group mt-3">
                   <label htmlFor="request-reason">Motivo de solicitud:</label>
                   <textarea
@@ -207,13 +167,11 @@ const BookList = ({ user, searchQuery = "" }) => {
                     className="form-control"
                     value={requestReason}
                     onChange={(e) => setRequestReason(e.target.value)}
-                    aria-label="Motivo de la solicitud"
                     rows={3}
                   />
                 </div>
               </div>
-
-              <div className="modal-footer d-flex gap-2 justify-content-end mt-3">
+              <div className="modal-footer d-flex gap-2 justify-content-end mt3">
                 <button className="btn btn-outline-secondary" onClick={() => setShowRequestModal(false)}>Cancelar</button>
                 <button className="btn btn-primary" onClick={submitRequest}>Enviar Solicitud</button>
               </div>
@@ -221,7 +179,7 @@ const BookList = ({ user, searchQuery = "" }) => {
           </div>
         )}
       </div>
-    </LibraryHero>
+    </>
   );
 };
 

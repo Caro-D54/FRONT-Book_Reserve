@@ -1,20 +1,46 @@
-import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useContext, useState} from 'react';
 
 const AuthContext = createContext();
 
-export const useAuth = () => {
+{/*export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth debe ser usado dentro de un AuthProvider');
   }
   return context;
-};
+};*/}
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  //const [loading, setLoading] = useState(true);
+  const register = async (name, email, password) => {
+    const userData = {
+      name: name || 'Usuario', email, requests: []
+    };
+    setUser(userData);
+    return userData;
+  };
 
-  useEffect(() => {
+  const login = async (email, password) => {
+    const userData = {
+      name: 'Usuario', email, requests: []
+    };
+    setUser(userData);
+    return userData;
+  };
+
+  const logout = () => setUser(null);
+
+  return <AuthContext.Provider value={{user, register, login, logout}}>
+    {children}
+  </AuthContext.Provider>
+};
+
+export const useAuth = () => useContext(AuthContext);
+export default AuthContext;
+
+
+ {/*{ useEffect(() => {
     setLoading(true);
     try {
       const saved = localStorage.getItem('biblioteca_user');
@@ -121,4 +147,4 @@ export const AuthProvider = ({ children }) => {
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
+};*/}

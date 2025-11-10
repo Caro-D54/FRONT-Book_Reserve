@@ -1,10 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import PropTypes from "prop-types";
-import "./Register.css";
+import "./Library.css";
 
-const Register = ({ onRegister = () => {}, onSwitchToLogin = () => {} }) => {
-  const { register } = useAuth();
+const Register = ({ onRegister = () => {}, onNavigate = () => {} }) => {
+
+  const auth = useAuth ();
+
+  const register = auth?.register ?? (async(name, email) => ({name: name || 'Usuario', email}));
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,11 +25,9 @@ const Register = ({ onRegister = () => {}, onSwitchToLogin = () => {} }) => {
     };
   }, []);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((p) => ({ ...p, [name]: value }));
-  };
-
+  const handleChange = (e) => 
+    setFormData(p => ({ ...p, [e.target.name]: e.target.value}));
+  
   const validate = () => {
     const email = (formData.email || "").trim();
     const pwd = formData.password || "";
@@ -73,31 +74,28 @@ const Register = ({ onRegister = () => {}, onSwitchToLogin = () => {} }) => {
   };
 
   return (
-    <div className="register-page py-5">
-      <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-12 col-sm-10 col-md-8 col-lg-6">
-            <div className="card shadow-sm">
-              <div className="card-body" p-4>
-                <header className="mb-3 text-center">
-                  <h1 className="h5 mb-1">
-                    Crear Cuenta
-                  </h1>
-                  <p className="text-muted small mb-0">
-                    Únete a Nexus Literario
-                  </p>
-                </header>
-                {error && (
-                  <div className="alert alert-danger" role="alert" aria-live="assertive">
-                    {error}
-                  </div>
-                )}
-                <form onSubmit={handleSubmit} noValidate>
-                  <div className="mb-3">
-                    <label htmlFor="name" className="form-label">
-                      Nombre Completo
-                    </label>
-                    <input
+    <div className="container py-4">
+      <div className="row justify-content-center">
+        <div className="col-12 col-sm-10 col-md-8 col-lg-6">
+          <div className="card shadow-sm">
+            <div className="card-body" p-4>
+              <h1 className="h5">
+                Crear Cuenta
+              </h1>
+              <p className="text-muted small mb-0">
+                Únete a Nexus Literario
+              </p>
+              {error && (
+                <div className="alert alert-danger" role="alert" aria-live="assertive">
+                  {error}
+                </div>
+              )}
+              <form onSubmit={handleSubmit} noValidate>
+                <div className="mb-3">
+                  <label htmlFor="name" className="form-label">
+                    Nombre Completo
+                  </label>
+                  <input
                     id="name"
                     name="name"
                     type="text"
@@ -107,13 +105,13 @@ const Register = ({ onRegister = () => {}, onSwitchToLogin = () => {} }) => {
                     onChange={handleChange}
                     disabled={loading}
                     autoComplete="name"
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label">
-                      Correo Electrónico
-                    </label>
-                    <input
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">
+                    Correo Electrónico
+                  </label>
+                  <input
                     id="email"
                     name="email"
                     type="email"
@@ -125,13 +123,13 @@ const Register = ({ onRegister = () => {}, onSwitchToLogin = () => {} }) => {
                     disabled={loading}
                     autoComplete="email"
                     aria-required="true"
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label">
-                      Contraseña
-                    </label>
-                    <input
+                  />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="password" className="form-label">
+                    Contraseña
+                  </label>
+                  <input
                     id="password"
                     name="password"
                     type="password"
@@ -144,15 +142,15 @@ const Register = ({ onRegister = () => {}, onSwitchToLogin = () => {} }) => {
                     autoComplete="new-password"
                     aria-required="true"
                     minLength={6}
-                    />
-                    <div className="form-text">
-                      La contraseña debe tener al menos 6 caracteres
-                    </div>
-                    <div className="mb-3">
-                      <label htmlFor="confirmPassword" className="form-label">
-                        Confirmar Contraseña
-                      </label>
-                      <input
+                  />
+                  <div className="form-text">
+                    La contraseña debe tener al menos 6 caracteres
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="confirmPassword" className="form-label">
+                      Confirmar Contraseña
+                    </label>
+                    <input
                       id="confirmPassword"
                       name="confirmPassword"
                       type="password"
@@ -164,58 +162,35 @@ const Register = ({ onRegister = () => {}, onSwitchToLogin = () => {} }) => {
                       disabled={loading}
                       autoComplete="new-password"
                       aria-required="true"
-                      />
-                    </div>
-                    <div className="d-grid gap-2">
-                      <button
-                        type="submit"
-                        className="btn btn-primary"
-                        disabled={loading}
-                        aria-busy={loading}
-                        >
-                          {loading ? (
-                            <>
-                            <i className="fas fa-spinner fa-spin me-2" aria-hidden="true"></i>
-                            Creando cuenta...
-                            </>
-                          ) : (
-                            <>
-                            <i className="fas fa-user-plus me-2" aria-hidden="true"></i>
-                            Crear Cuenta
-                            </>
-                          )}
-                        </button>
-                    </div>
+                    />
                   </div>
-                </form>
-                <footer className="mt-3 text-center">
-                  <small className="text-muted">
-                    ¿Ya tienes una cuenta?{" "}
+                  <div className="d-grid gap-2">
                     <button
-                      type="button"
-                      className="btn btn-link p-0 align-baseline"
-                      onClick={() => typeof onSwitchToLogin === 'function' && onSwitchToLogin}
+                      type="submit"
+                      className="btn btn-primary"
                       disabled={loading}
-                      >
-                        Inicia sesión aquí
+                    >
+                    {loading ? 'Creando cuenta...' : 'Crear cuenta'}
                     </button>
-                  </small>
-                </footer>
+                  </div>
+                </div>
+              </form>
+              <div className="mt-3 text-center">
+                <small className="text-muted">
+                  ¿Ya tienes cuenta?
+                  <button
+                  className="btn btn-link p-0"
+                  onClick={() => onNavigate('login')}>
+                    Inicia Sesión
+                  </button>
+                </small>
               </div>
-            </div>
-            <div className="text-center text-muted small mt-3">
-              Al registrarte aceptas terminos y condiciones
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-Register.propTypes = {
-  onRegister: PropTypes.func,
-  onSwitchToLogin: PropTypes.func,
 };
 
 export default Register;

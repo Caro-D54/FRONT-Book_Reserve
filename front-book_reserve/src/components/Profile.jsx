@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import "./Profile.css";
+import "./Library.css";
 
 /* Helpers */
 const formatDate = (value) => {
@@ -60,44 +60,38 @@ const Profile = ({ user, requests = [], onNavigate = () => {}, onRead = () => {}
 
   if (!user) {
     return (
-      <section className="profile-container py-5">
+      <section className="profile py-5">
         <div className="container">
-          <div className="alert alert-info d-flex align-items-center" role="alert" aria-live="polite">
-            <i className="fas fa-user-lock me-3" aria-hidden="true" />
-            <div>
-              <h4 className="mb-1">Acceso requerido</h4>
-              <p className="mb-2">Por favor inicia sesión para acceder a tu perfil</p>
-              <button type="button" className="btn btn-primary" onClick={() => onNavigate("login")}>
-                Iniciar sesión
-              </button>
-            </div>
+          <div className="alert alert-info" role="alert">
+            <h4>Acceso requerido</h4>
+            <p>Por favor inicia sesión para acceder a tu perfil</p>
+            <button className="btn btn-primary" onClick={() => onNavigate('login')}>Iniciar Sesión</button>
           </div>
         </div>
       </section>
     );
   }
 
-  const filtered = userRequests.filter((r) => (activeTab === "all" ? true : r.status === activeTab));
-
+  const filtered = userRequests.filter((r) => (activeTab === 'all' ? true : r.status === activeTab));
   return (
-    <section className="profile-container py-4" aria-labelledby="profile-title">
+    <section className="profile py-4">
       <div className="container">
         <header className="d-flex gap-4 align-items-center mb-4">
-          <div className="profile-avatar rounded-circle bg-secondary d-flex align-items-center justify-content-center" style={{ width: 72, height: 72 }}>
+          <div className="profile-avatar rounded-circle bg-secondary d-flex align-items-center justify-content-center" style={{width: 72, height: 72}}>
             <i className="fas fa-user text-white" aria-hidden="true" />
           </div>
-
           <div className="flex-grow-1">
-            <h1 id="profile-title" className="h4 mb-1">{user.name}</h1>
+            <h1 className="h4 mb-1">
+              {user.name}
+            </h1>
             <p className="text-muted mb-2">{user.email}</p>
-
             <div className="d-flex gap-4">
               <div className="text-center">
-                <div className="h5 mb-0">{userRequests.filter((r) => r.status === "approved").length}</div>
+                <div className="h5 mb-0">{userRequests.filter(r => r.status === 'aproved').length}</div>
                 <small className="text-muted">Libros Aprobados</small>
               </div>
               <div className="text-center">
-                <div className="h5 mb-0">{userRequests.filter((r) => r.status === "pending").length}</div>
+                <div className="h5 mb-0">{userRequests.filter(r => r.status === 'pending').length}</div>
                 <small className="text-muted">Solicitudes Pendientes</small>
               </div>
               <div className="text-center">
@@ -107,94 +101,105 @@ const Profile = ({ user, requests = [], onNavigate = () => {}, onRead = () => {}
             </div>
           </div>
         </header>
-
-        <nav className="mb-3" role="tablist" aria-label="Pestañas de perfil">
+        <nav className="mb-3" role="tablist">
           <div className="nav nav-tabs">
-            <button className={`nav-link ${activeTab === "all" ? "active" : ""}`} id="tab-all" role="tab" aria-selected={activeTab === "all"} onClick={() => setActiveTab("all")}>
-              <i className="fas fa-list me-1" aria-hidden="true" /> Todas
+            <button 
+              className={"nav-link ${activeTab === 'all' ? 'active' : ''}"}
+              onClick={() => setActiveTab('all')}>
+                Todas
             </button>
-            <button className={`nav-link ${activeTab === "approved" ? "active" : ""}`} id="tab-approved" role="tab" aria-selected={activeTab === "approved"} onClick={() => setActiveTab("approved")}>
-              <i className="fas fa-check-circle me-1" aria-hidden="true" /> Aprobadas
+            <button 
+              className={"nav-link ${activeTab === 'approved' ? 'active' : ''}"} 
+              onClick={() => setActiveTab('approved')}>
+                Aprobados
             </button>
-            <button className={`nav-link ${activeTab === "pending" ? "active" : ""}`} id="tab-pending" role="tab" aria-selected={activeTab === "pending"} onClick={() => setActiveTab("pending")}>
-              <i className="fas fa-clock me-1" aria-hidden="true" /> Pendientes
+            <button 
+              className={"nav-link ${activeTab === 'pending' ? 'active' : ''}"} 
+              onClick={() => setActiveTab('pending')}>
+                Pendientes
             </button>
-            <button className={`nav-link ${activeTab === "rejected" ? "active" : ""}`} id="tab-rejected" role="tab" aria-selected={activeTab === "rejected"} onClick={() => setActiveTab("rejected")}>
-              <i className="fas fa-times-circle me-1" aria-hidden="true" /> Rechazadas
+            <button
+              className={"nav-link ${activeTab === 'rejected' ? 'active' : ''}"}
+              onClick={() => setActiveTab('rejected')}>
+                Rechazadas
             </button>
           </div>
         </nav>
-
-        <main className="requests-section" aria-live="polite">
-          <h2 className="h5 mb-3">Mis Solicitudes de Lectura</h2>
-
+        <main aria-live="polite">
+          <h2 className="h5 mb-3">
+            Mis Solicitudes de Lectura
+          </h2>
           {filtered.length === 0 ? (
             <div className="card p-4 text-center">
               <div className="mb-3 text-muted">
-                <i className="fas fa-inbox fa-2x" aria-hidden="true"></i>
+                <i className="fas fa-inbox fa-2x" />
               </div>
-              <h3 className="h6">
-                No hay solicitudes {activeTab !== "all" ? pluralizeStatus(readableStatus(activeTab)) : ""}
-              </h3>
-              <p className="text-muted">
-                {activeTab === "all" ? "Aún no has realizado ninguna solicitud de lectura." : `No tienes solicitudes ${pluralizeStatus(readableStatus(activeTab))} en este momento.`}
-              </p>
-              <button type="button" className="btn btn-primary" onClick={() => onNavigate("catalog")}>Ir al catálogo</button>
+                <h3> className="h6"
+                  No hay solicitudes {activeTab !== 'all' ? activeTab : ''}
+                </h3>
+                <p className="text-muted">
+                  {activeTab === 'all' ? 'Aún no has realizado ninguna solicitud de lectura.' : `No tienes solicitudes ${activeTab} en este momento.`}
+                </p>
+                <button className="btn btn-primary" onClick={() => onNavigate('catalog')}>
+                  Ir al catálogo
+                </button>
             </div>
           ) : (
             <div className="row g-3">
               {filtered.map((req) => (
-                <article key={req.id} className="col-12" role="listitem" aria-labelledby={`req-title-${req.id}`}>
+                <article key={req.id} className="col-12">
                   <div className="card">
                     <div className="card-body d-flex flex-column flex-md-row justify-content-between gap-3">
-                      <div style={{ minWidth: 0 }}>
-                        <header className="d-flex align-items-start gap-3 mb-2">
-                          <div>
-                            <h3 id={`req-title-${req.id}`} className="h6 mb-0 text-truncate">{req.title}</h3>
-                            <div className="text-muted small">{req.author}</div>
-                          </div>
-                        </header>
-
-                        <div className="d-flex flex-wrap gap-3 text-muted small">
-                          <div><strong>Solicitado:</strong> <span>{formatDate(req.createdAt)}</span></div>
-                          {req.updatedAt && <div><strong>Aprobado:</strong> <span>{formatDate(req.updatedAt)}</span></div>}
+                      <div style={{minWidth: 0}}>
+                        <h3 
+                          id={'req-title-${req.id}'}
+                          className="h6 mb-0 text-truncate">
+                            {req.title}
+                        </h3>
+                        <div className="text-muted small">
+                          {req.author}
                         </div>
-
+                        <div className="d-flex flex-wrap gap-3 text-muted small mt-2">
+                          <div>
+                            <strong>Solicitado:</strong>
+                            {formatDate(req.createdAt)}
+                          </div>
+                          {req.updatedAt && <div>
+                            <strong>Aprobado:</strong>
+                            {formatDate(req.updatedAt)}
+                          </div>}
+                        </div>
                         <div className="mt-2">
                           <strong>Motivo:</strong>
-                          <div className="text-secondary small">{req.reason}</div>
+                          <div className="text-secondary small">
+                            {req.reason}
+                          </div>
                         </div>
-
-                        {req.rejectionReason && (
+                        {req.rejectionReason && 
                           <div className="mt-2">
                             <strong>Razón de Rechazo:</strong>
-                            <div className="text-danger small">{req.rejectionReason}</div>
+                            <div className="text-danger small">
+                              {req.rejectionReason}
+                            </div>
                           </div>
-                        )}
+                        }
                       </div>
-
                       <div className="d-flex flex-column align-items-md-end align-items-start gap-2">
-                        <span className={statusClass(req.status)} aria-label={`Estado: ${readableStatus(req.status)}`}>
+                        <span className={statusClass(req.status)}>
                           {readableStatus(req.status)}
                         </span>
-
-                        {req.status === "approved" && (
-                          <button type="button" className="btn btn-primary" onClick={() => onRead(req)}>
-                            <i className="fas fa-book-open me-1" aria-hidden="true" /> Leer Libro
-                          </button>
-                        )}
-
-                        {req.status === "pending" && (
-                          <button type="button" className="btn btn-outline-secondary" disabled>
-                            <i className="fas fa-clock me-1" aria-hidden="true" /> En revisión
-                          </button>
-                        )}
-
-                        {req.status === "rejected" && (
-                          <button type="button" className="btn btn-outline-secondary" onClick={() => onRetry(req)}>
-                            <i className="fas fa-redo me-1" aria-hidden="true" /> Solicitar nuevamente
-                          </button>
-                        )}
+                        {req.status === 'approved' && 
+                        <button className="btn btn-primary" onClick={() => onRead(req)}>
+                          Leer Libro
+                        </button>}
+                        {req.status === 'pending' &&
+                        <button className="btn btn-outline-secondary" disabled>
+                          En revisión
+                        </button>}
+                        {req.status === 'rejected' &&
+                        <button className="btn btn-outline-secondary" onClick={() => onRetry(req)}>
+                          Solicitar nuevamente
+                        </button>}
                       </div>
                     </div>
                   </div>
@@ -209,22 +214,11 @@ const Profile = ({ user, requests = [], onNavigate = () => {}, onRead = () => {}
 };
 
 Profile.propTypes = {
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    email: PropTypes.string,
-  }),
-  requests: PropTypes.arrayOf(PropTypes.object),
+  user: PropTypes.object,
+  requests: PropTypes.array,
   onNavigate: PropTypes.func,
   onRead: PropTypes.func,
   onRetry: PropTypes.func,
-};
-
-Profile.defaultProps = {
-  user: null,
-  requests: [],
-  onNavigate: () => {},
-  onRead: () => {},
-  onRetry: () => {},
 };
 
 export default Profile;

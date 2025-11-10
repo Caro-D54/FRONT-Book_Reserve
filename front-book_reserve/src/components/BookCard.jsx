@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import "./BookCard.css";
+import "./Library.css";
 
 const BookCard = ({ book = {}, onRequest = () => {}, onView = () => {} }) => {
     const {
@@ -15,15 +15,15 @@ const BookCard = ({ book = {}, onRequest = () => {}, onView = () => {} }) => {
 
     const labelledBy = `title-${id}`;
     const isImageUrl = 
-    typeof cover === "string" && /^(https?:\/\/)/i.test(cover);
+    typeof cover === "string" && /^(https?:\/\/|data:|\/)/i.test(cover);
 
     return (
         <article className="card h-100 book-card" aria-labelledby={labelledBy}>
             <div className="card-body d-flex flex-column">
-                <div className="d-flex align-items-start gap-3">
+                <div className="d-flex gap-3">
                     <div
                     className="book-cover flex-shrink-0"
-                    aria-hidden={cover ? "false" : "true"}
+                    aria-hidden={!cover ? "false" : "true"}
                     style={{width: 96, height: 128}}
                     >
                         {cover ? (
@@ -31,10 +31,10 @@ const BookCard = ({ book = {}, onRequest = () => {}, onView = () => {} }) => {
                                 <img
                                 src={cover}
                                 alt={'Portada de ${title}'}
-                                className="book-cover-img img-fluid rounded"
+                                className="img-fluid rounded"
                                 loading="lazy"
                                 style={{width: "100%", height: "100%", objectFit: "cover"}}
-                            />
+                            /> 
                             ) : (
                                 <span className="book-cover-fallback fs-1" aria-hidden="true">
                                     {cover}
@@ -47,21 +47,21 @@ const BookCard = ({ book = {}, onRequest = () => {}, onView = () => {} }) => {
                             )}
                         </div>
                         <div className="book-meta" style={{minWidth: 0}}>
-                            <h3 id={labelledBy} className="card-title h6 mb-1 text-truncate">
+                            <h3 id={labelledBy} className="card-title h6 text-truncate">
                                 {title}
                             </h3>
-                            <p className="card-text text-muted mb-1" style={{fontSize: ".92rem"}}>
+                            <p className="card-text text-muted mb-1 small">
                                 {author}
                             </p>
                             {(genre || year) && (
-                                <p className="text-warning mb-2" style={{fontSize: ".85rem"}}>
+                                <p className="text-warning small mb-2">
                                     {genre}
                                     {genre && year ? " · " : ""}
                                     {year}
                                 </p>
                             )}
                             {description && (
-                                <p className="text-secondary small mb-2" style={{WebkitLineClamp: 3, display: "-webkit-box", WebkitBoxOrient: "vertical", overflow: "hidden"}}>
+                                <p className="text-secondary small mb-0" style={{WebkitLineClamp: 3, display: "-webkit-box", WebkitBoxOrient: "vertical", overflow: "hidden"}}>
                                 {description}
                                 </p>
                             )}

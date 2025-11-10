@@ -1,38 +1,15 @@
-:root{
-  --beige: #e8d9c4;
-  --cafe: #785D32;
-  --cafe-oscuro: #3E160C;
-  --azul-oscuro: #050A30;
+:root {
+    --bs-body-font-family: Georgia, "Times New Roman", serif;
+    --bs-body-bg: #E8D9C4;
+    --bs-body-color: #3E160C;
 }
 
-.btn-primary {
-    background-color: var(--cafe);
-    border-color: var(--cafe);
+.nexus .btn-primary {
+    background-color: #785d32;
+    border-color: #785d32;
 }
 
-.btn-primary:hover {
-    background-color: var(--cafe-oscuro);
-    border-color: var(--cafe-oscuro);
-}
-
-.btn-outline-primary {
-    color: var(--cafe);
-    border-color: var(--cafe);
-}
-
-.btn-outline-primary:hover {
-    background-color: var(--cafe);
-    color: white;
-}
-
-.text-primary {
-    color: var(--cafe);
-}
-
-.bg-primary {
-    background-color: var(--cafe);
-}
-
-body{
-    font-family: 'Georgia', Times New Roman, serif;
+.nexus .btn-primary:hover {
+    background-color: #3E160C;
+    border-color: #3E160C;
 }

@@ -7,7 +7,6 @@ import Recommendations from "./components/Recommendations";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Footer from "./components/Footer";
-import "./components/Globals.css";
 
 
 function App() {
@@ -70,7 +69,7 @@ function App() {
   };
 
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div className="nexus d-flex flex-column min-vh-100">
       <Header 
         user={user}
         onNavigate={handleNavigate}

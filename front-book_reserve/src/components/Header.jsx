@@ -1,31 +1,75 @@
 import React from 'react';
-import './Header.css';
+import './Library.css';
 
-const Header = () => {
-  return (
-    <header className="header">
-      <div className="container">
-        <div className="header-content">
-          <div className="logo">
-            <i className="fas fa-book-open"></i>
-            <h1>Nexus Literario</h1>
-          </div>
-          <nav>
-            <ul>
-              <li><a href="#" className="active">Inicio</a></li>
-              <li><a href="#catalogo">Catálogo</a></li>
-              <li><a href="#perfil">Mi Perfil</a></li>
-              <li><a href="#ayuda">Ayuda</a></li>
-            </ul>
-          </nav>
-          <div className="user-actions">
-            <button className="btn btn-outline" id="loginBtn">Iniciar Sesión</button>
-            <button className="btn btn-primary" id="registerBtn">Registrarse</button>
+const Header = (
+  {user, onNavigate = () => {}, 
+  onLogout = () => {}, 
+  searchQuery = '', setsearchQuery = () => {}}) => {
+    return (
+      <header>
+        <div className="container">
+          <div className="header-content">
+            <div className="logo" role='banner'>
+              <i className="fas fa-book-open" aria-hidden="true"/>
+              <h1 className='mb-0'>Nexus Literario</h1>
+            </div>
+            <nav>
+              <ul>
+                <li>
+                  <button className="btn btn-link text-decoration-none text-reset" onClick={() => onNavigate('home')}>
+                    Inicio
+                  </button>
+                </li>
+                <li>
+                  <button className='btn btn-link text-decoration-none text-reset' onClick={() => onNavigate('catalog')}>
+                    Catálogo
+                  </button>
+                </li>
+                <li>
+                  <button className='btn btn-link text-decoration-none text-reset' onClick={() => onNavigate('profile')}>
+                    Mi Perfil
+                  </button>
+                </li>
+                <li>
+                  <button className='btn btn-link text-decoration-none text-reset' onClick={() => onNavigate('recommendations')}>
+                    Ayuda
+                  </button>
+                </li>
+              </ul>
+            </nav>
+            <div className="user-actions">
+              <input 
+              value={searchQuery} 
+              onChange={(e) => setsearchQuery(e.target.value)} 
+              className='form-control me-2' 
+              style={{maxWidth: 220}}
+              placeholder='Buscar...'
+              />
+              {user ? (
+                <>
+                  <span className='text-light me-2'>
+                    {user.name}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <button 
+                    className='btn btn-outline'
+                    onClick={() => onNavigate('login')}>
+                      Iniciar Sesión
+                  </button>
+                  <button
+                    className='btn btn-primary'
+                    onClick={() => onNavigate('register')}>
+                      Registrarse
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </header>
-  );
-};
+      </header>
+    );
+  };
 
 export default Header;
