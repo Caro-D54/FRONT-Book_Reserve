@@ -224,19 +224,86 @@
   align-items:center; 
   gap:1rem; 
   flex-wrap:wrap; 
-  margin-bottom:1.25rem; }
-.nexus .filter-select, .nexus .form-select { background: rgba(255,255,255,0.03); color:var(--text); border:1px solid rgba(255,255,255,0.06); }
+  margin-bottom:1.25rem; 
+}
+
+.nexus .form-select { 
+  background: rgba(255,255,255,0.03); 
+  color:var(--bg); 
+  border:1px solid rgba(255,255,255,0.06); 
+}
+
+.nexus .books .form-control {
+  background: rgba(255,255,255,0.03);
+  color:var(--accent);
+  border:1px solid rgba(255,255,255,0.06);
+}
+
+.nexus .books-grid .col-12 {
+  width: 100%;
+}
 
 /* Book card */
 .nexus .book-card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.05));
-  border-radius:8px; overflow:hidden; box-shadow:0 10px 30px rgba(2,6,12,0.35); transition:transform .2s;
+  padding: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.04));
+  border-radius: 10px; 
+  overflow:hidden; 
+  box-shadow:0 12px 28px rgba(2,6,12,0.12); 
   border:1px solid rgba(255,255,255,0.04);
 }
+.book-thumb-wrap {
+  width: 140px;
+  flex: 0 0 140px;
+}
+
+.book-thumb {
+  width: 140px;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.book-thumb.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 200px;
+  background: rgba(255,255,255,0.03);
+  color: var(--muted);
+  font-size: 40px;
+}
+
+/* book-body */
+.book-body {
+  padding: 1rem 1rem 1.1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.book-title {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--bg);
+  font-weight: 700;
+}
+
+.book-author {
+  margin-top: 4px;
+  color: var(--muted);
+}
+
+/* Actions */
+.book-actions .btn {
+  padding: .5rem .7rem;
+}
+
 .nexus .book-card:hover { transform: translateY(-6px); }
 .nexus .book-cover { height:220px; background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.18)); display:flex; align-items:center; justify-content:center; color:var(--text); }
 .nexus .book-info { padding:1rem; color:var(--text); }
-.nexus .book-title { color:var(--text); font-weight:700; }
+.nexus .book-title { color:var(--bg); font-weight:700; }
 
 /* ---------- Profile / Requests ---------- */
 .nexus .profile { padding:3.5rem 0; }
@@ -272,6 +339,8 @@
   .nexus .header-content { flex-direction:column; align-items:stretch; gap:.75rem; }
   .nexus .profile-container { grid-template-columns:1fr; }
   .nexus .books-grid { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); }
+  .book-thumb-wrap { width: 110px; flex: 0 0 110px; }
+  .book-thumb { width: 110px; height: 160px; }
 }
 @media (max-width: 576px) {
   .nexus .feature-icon{
