@@ -307,7 +307,7 @@
 
 /* ---------- Login ---------- */
 .nexus .login-page {
-  min-width: 100vh;
+  min-height: 100vh;
   display: grid;
   place-items: center;
   position: relative;
@@ -320,7 +320,7 @@
 .nexus .login-backdrop {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(4, 8, 15, 0.55), rgba(4, 8, 15, 0.6));
+  background: linear-gradient(180deg, rgba(210, 172, 36, 0.55), rgba(35, 84, 130, 0.636));
   z-index: 0;
 }
 
@@ -334,9 +334,8 @@
   border-radius: 14px;
   background: linear-gradient(180deg, rgba(119, 84, 23, 0.02), rgba(0, 0, 0, 0.06));
   box-shadow: 0 18px 40px rgba(2, 6, 12, 0.6);
-  border: 2px solid rgba(135, 96, 12, 0.812);
+  border: 2px solid rgba(149, 109, 23, 0.812);
   color: var(--text, #E8D9C4);
-  flex-direction: column;
 }
 
 /* Titulo */
@@ -350,23 +349,23 @@
 
 /* Form controls */
 .login-form { display: flex; flex-direction: column; gap: 0.5rem; }
-.form-label { font-size: 0.9rem; color: rgba(181, 153, 124, 0.9); margin-bottom: 0.25rem; }
+.form-label { font-size: 0.9rem; color: rgba(80, 40, 10, 0.932); margin-bottom: 0.25rem; }
 .login-input {
   width: 100%;
   padding: 0.65rem 0.75rem;
   border-radius: 8px;
   border: 1px solid rgba(255,255,255,0.06);
   background: rgba(124, 72, 9, 0.321);
-  color: var(--bg, #7d5824);
+  color: var(--accent-dark, #7d5824);
   outline: none;
   transition: box-shadow .12s ease, border-color .12s ease;
 }
 
-.login-input::placeholder { color: rgba(224, 212, 104, 0.811); }
+.login-input::placeholder { color: rgba(87, 42, 3, 0.9); }
 
 /* focus */
 .login-input:focus {
-  box-shadow: 0 6px 20px rgba(120, 93, 50, 0.73);
+  box-shadow: 0 6px 20px rgba(19, 14, 4, 0.73);
   border-color: rgba(120,93,50,0.28);
 }
 
@@ -375,7 +374,7 @@
 .btn-toggle-pass {
   background: transparent;
   border: none;
-  color: var(--muted, rgba(192, 126, 35, 0.8));
+  color: var(--surface, rgba(192, 126, 35, 0.8));
   padding: 0.45rem 0.6rem;
   border-radius: 8px;
   cursor: pointer;
@@ -458,7 +457,27 @@
   .nexus .feature-icon{
     width: 48px;
     height: 48px;
-  }  
+  }
+  .nexus .login-panel {
+    padding: 1.25rem;
+    border-radius: 12px;
+    width: calc(100% - 32px);
+  }
+  .nexus .login-input {
+    font-size: 0.95rem;
+  }
+  .nexus .login-title {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+  .btn-cta {
+    font-size: 0.95rem;
+    padding: 0.6rem 0.9rem;
+  }
+  .login-footer {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
 }
 @media (max-width: 575.98px) {
   .nexus .feature-item {
