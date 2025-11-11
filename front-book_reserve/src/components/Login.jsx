@@ -1,64 +1,72 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import React, { useState } from "react";
 import "./Library.css";
 
-const Login = ({ onLogin = () => {}, onNavigate = () => {} }) => {
-  const auth = useAuth();
-  const login = auth?.login ?? (async (email) => ({ name: "Demo", email }));
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const mountedRef = useRef(true);
+const Login = ({ onLogin = () => {} }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  useEffect(() => { mountedRef.current = true; return () => { mountedRef.current = false; }; }, []);
-
-  const handleChange = (e) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (loading) return;
-    setError(""); setLoading(true);
-    try {
-      const user = await login(form.email.trim(), form.password);
-      if (user && typeof onLogin === "function") onLogin(user);
-    } catch (err) {
-      if (mountedRef.current) setError(err?.message || "Error al iniciar sesión.");
-    } finally { if (mountedRef.current) setLoading(false); }
+    // valida mínimo (puedes reemplazar con validación real / llamada API)
+    if (!email || !password) {
+      alert("Por favor completa correo y contraseña.");
+      return;
+    }
+    onLogin({ email, password });
   };
 
   return (
-    <div className="container py-4">
-      <div className="row justify-content-center">
-        <div className="col-12 col-sm-10 col-md-6 col-lg-5">
-          <div className="card shadow-sm">
-            <div className="card-body p-4">
-              <h1 className="h5">Iniciar Sesión</h1>
-              <p className="text-muted small">Accede a tu cuenta</p>
-              {error && <div className="alert alert-danger">{error}</div>}
-              <form onSubmit={handleSubmit} noValidate>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">Correo electrónico</label>
-                  <input id="email" name="email" type="email" className="form-control" value={form.email} onChange={handleChange} required autoComplete="email" />
-                </div>
+    <main className="login-page">
+      <div className="login-backdrop" />
 
-                <div className="mb-3">
-                  <label htmlFor="password" className="form-label">Contraseña</label>
-                  <input id="password" name="password" type="password" className="form-control" value={form.password} onChange={handleChange} required autoComplete="current-password" />
-                </div>
+      <div className="login-panel" role="dialog" aria-labelledby="login-title" aria-modal="true">
+        <h1 id="login-title" className="login-title">Iniciar Sesión</h1>
 
-                <div className="d-grid gap-2">
-                  <button className="btn btn-primary" type="submit" disabled={loading}>{loading ? "Entrando..." : "Entrar"}</button>
-                </div>
-              </form>
+        <form className="login-form" onSubmit={handleSubmit} noValidate>
+          <label className="form-label" htmlFor="login-email">Correo Electrónico</label>
+          <input
+            id="login-email"
+            type="email"
+            className="form-control login-input"
+            placeholder="usuario@ejemplo.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            aria-required="true"
+          />
 
-              <div className="mt-3 text-center">
-                <small className="text-muted">¿No tienes cuenta? <button className="btn btn-link p-0" onClick={() => onNavigate("register")}>Regístrate</button></small>
-              </div>
-            </div>
+          <label className="form-label mt-3" htmlFor="login-password">Contraseña</label>
+          <div className="password-row">
+            <input
+              id="login-password"
+              type={showPassword ? "text" : "password"}
+              className="form-control login-input"
+              placeholder="Ingresa tu contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              aria-required="true"
+            />
+            <button
+              type="button"
+              className="btn-toggle-pass"
+              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              onClick={() => setShowPassword((s) => !s)}
+            >
+              {showPassword ? "Ocultar" : "Ver"}
+            </button>
           </div>
-        </div>
+
+          <button type="submit" className="btn btn-cta login-submit">Iniciar Sesión</button>
+
+          <div className="login-footer">
+            <span className="muted">¿No tienes una cuenta?</span>
+            <button type="button" className="btn btn-link login-register" onClick={() => window.location.href = "/register"}>Regístrate</button>
+          </div>
+        </form>
       </div>
-    </div>
+    </main>
   );
 };
 
