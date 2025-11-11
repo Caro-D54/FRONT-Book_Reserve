@@ -336,6 +336,7 @@
   box-shadow: 0 18px 40px rgba(2, 6, 12, 0.6);
   border: 2px solid rgba(135, 96, 12, 0.812);
   color: var(--text, #E8D9C4);
+  flex-direction: column;
 }
 
 /* Titulo */
@@ -361,7 +362,7 @@
   transition: box-shadow .12s ease, border-color .12s ease;
 }
 
-.login-input::placeholder { color: rgba(8, 30, 56, 0.811); }
+.login-input::placeholder { color: rgba(224, 212, 104, 0.811); }
 
 /* focus */
 .login-input:focus {
