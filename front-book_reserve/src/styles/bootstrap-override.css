@@ -1,0 +1,15 @@
+:root {
+    --bs-body-font-family: Georgia, "Times New Roman", serif;
+    --bs-body-bg: #E8D9C4;
+    --bs-body-color: #3E160C;
+}
+
+.nexus .btn-primary {
+    background-color: #785d32;
+    border-color: #785d32;
+}
+
+.nexus .btn-primary:hover {
+    background-color: #3E160C;
+    border-color: #3E160C;
+}
