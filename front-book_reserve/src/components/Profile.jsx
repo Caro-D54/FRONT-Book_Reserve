@@ -3,29 +3,28 @@ import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import "./Library.css";
 
+/* Importa tus 5 avatars locales (ajusta rutas según tu proyecto) */
+import avatar1 from "../assets/basic_avatar.png";
+import avatar2 from "../assets/fantasy_avatar.png";
+import avatar3 from "../assets/scifi_avatar.png";
+import avatar4 from "../assets/history_avatar.png";
+import avatar5 from "../assets/mistery_avatar.png";
+import avatar6 from "../assets/romance_avatar.png";
+import avatar7 from "../assets/girl_avatar.png";
+import avatar8 from "../assets/man_avatar.png";
+import avatar9 from "../assets/general_avatar.png";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const STORAGE_KEY = "app_profile_v2";
 
-/* Rutas de ejemplo para 5 avatares. Reemplaza por tus imágenes o importa con webpack. */
-const AVATARS = [
-  "./assets/basic_avatar.png",
-  "./assets/fantasy_avatar.png",
-  "./assets/scifi_avatar.png",
-  "./assets/history_avatar.png",
-  "./assets/mystery_avatar.png",
-  "./assets/romance_avatar.png",
-  "./assets/girl_avatar.png",
-  "./assets/man_avatar.png",
-  "./assets/general_avatar.png",
-];
+const AVATARS = [avatar1, avatar2, avatar3, avatar4, avatar5, avatar6, avatar7, avatar8, avatar9];
 
-/* Estado inicial de ejemplo (sustituye con tu API si procede) */
 const DEFAULT_STATE = {
   user: {
     id: 1,
-    name: "Camila Martínez",
-    email: "camila01@ejemplo.com",
+    name: "user",
+    email: "user@ejemplo.com",
     avatar: AVATARS[0],
   },
   solicitudes: [
@@ -62,46 +61,42 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
   const [state, setState] = useState(() => loadState());
   const user = userProp || state.user;
 
-  const [section, setSection] = useState("Solicitudes"); // Solicitudes | Favoritos | Historial | Configuración
-  const [solFilter, setSolFilter] = useState("Todas"); // Todas | Pendientes | Aprobadas | Rechazadas
+  const [section, setSection] = useState("Solicitudes");
+  const [solFilter, setSolFilter] = useState("Todas");
 
-  /* Configuración (formularios controlados) */
   const [nameEdit, setNameEdit] = useState(user?.name || "");
   const [emailEdit, setEmailEdit] = useState(user?.email || "");
-  const [avatarPick, setAvatarPick] = useState(user?.avatar || AVATARS[0]);
+  const [pendingAvatar, setPendingAvatar] = useState(user?.avatar || AVATARS[0]);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passMsg, setPassMsg] = useState(null);
 
-  /* Persistencia local automática */
-  useEffect(() => {
-    saveState(state);
-  }, [state]);
+  useEffect(() => saveState(state), [state]);
 
-  /* Solicitudes filtradas dinámicamente */
+  useEffect(() => {
+    // keep form fields in sync when user data changes externally
+    setNameEdit(state.user?.name || "");
+    setEmailEdit(state.user?.email || "");
+    setPendingAvatar(state.user?.avatar || AVATARS[0]);
+  }, [state.user]);
+
   const solicitudesFiltered = useMemo(() => {
     if (solFilter === "Todas") return state.solicitudes;
-    return state.solicitudes.filter(
-      (s) => s.status.toLowerCase() === solFilter.toLowerCase()
-    );
+    return state.solicitudes.filter((s) => s.status.toLowerCase() === solFilter.toLowerCase());
   }, [state.solicitudes, solFilter]);
 
-  /* Favoritos: agregar/quitar */
   const toggleFavorite = (book) => {
     setState((prev) => {
       const exists = prev.favoritos.some((f) => f.id === book.id);
-      const favoritos = exists
-        ? prev.favoritos.filter((f) => f.id !== book.id)
-        : [...prev.favoritos, book];
+      const favoritos = exists ? prev.favoritos.filter((f) => f.id !== book.id) : [...prev.favoritos, book];
       return { ...prev, favoritos };
     });
   };
 
-  /* Historial: estadísticas */
   const totalBooks = state.historial.length;
-  const totalMinutes = state.historial.reduce((sum, h) => sum + (h.minutes || 0), 0);
+  const totalMinutes = state.historial.reduce((s, h) => s + (h.minutes || 0), 0);
   const avgMinutes = totalBooks ? Math.round(totalMinutes / totalBooks) : 0;
   const fmtMinutes = (mins) => {
     const h = Math.floor(mins / 60);
@@ -109,7 +104,6 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
     return `${h}h ${m}m`;
   };
 
-  /* Doughnut: conteo por género */
   const genreCounts = useMemo(() => {
     const map = {};
     state.historial.forEach((h) => {
@@ -126,7 +120,6 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
     return { labels, datasets: [{ data, backgroundColor: palette.slice(0, labels.length), borderWidth: 0 }] };
   }, [genreCounts]);
 
-  /* Acciones solicitudes (cambiar estado) */
   const updateSolicitudStatus = (id, status) => {
     setState((prev) => ({
       ...prev,
@@ -134,26 +127,25 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
     }));
   };
 
-  /* Guardar configuración de perfil (simulado) */
   const saveProfile = () => {
     if (!nameEdit.trim() || !emailEdit.trim()) {
-      alert("Nombre y correo son obligatorios");
+      alert("Nombre y correo obligatorios");
       return;
     }
     setState((prev) => ({
       ...prev,
-      user: { ...prev.user, name: nameEdit.trim(), email: emailEdit.trim(), avatar: avatarPick },
+      user: { ...prev.user, name: nameEdit.trim(), email: emailEdit.trim(), avatar: pendingAvatar },
     }));
-    alert("Perfil actualizado");
+    setPassMsg(null);
+    alert("Perfil guardado");
   };
 
-  /* Cambiar contraseña (simulado, validaciones básicas) */
   const changePassword = () => {
     setPassMsg(null);
     if (!currentPassword) return setPassMsg({ type: "error", text: "Contraseña actual requerida" });
-    if (!newPassword || !confirmPassword) return setPassMsg({ type: "error", text: "Rellena la nueva contraseña y su confirmación" });
+    if (!newPassword || !confirmPassword) return setPassMsg({ type: "error", text: "Rellena nueva contraseña y confirmación" });
     if (newPassword !== confirmPassword) return setPassMsg({ type: "error", text: "Las contraseñas no coinciden" });
-    if (newPassword.length < 6) return setPassMsg({ type: "error", text: "La contraseña debe tener al menos 6 caracteres" });
+    if (newPassword.length < 6) return setPassMsg({ type: "error", text: "Mínimo 6 caracteres" });
 
     setCurrentPassword("");
     setNewPassword("");
@@ -161,7 +153,6 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
     setPassMsg({ type: "success", text: "Contraseña actualizada (simulado)" });
   };
 
-  /* Si no hay usuario (ni prop ni en state) mostrar CTA */
   if (!user) {
     return (
       <section className="profile py-5">
@@ -181,13 +172,12 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
   return (
     <main className="profile-page nexus">
       <div className="profile-container">
-        {/* Sidebar */}
         <aside className="profile-sidebar card">
           <div className="sidebar-user">
-            <img src={user.avatar || AVATARS[0]} alt="avatar" className="sidebar-avatar" />
+            <img src={state.user?.avatar || AVATARS[0]} alt="avatar" className="sidebar-avatar" />
             <div>
-              <div className="sidebar-name">{user.name}</div>
-              <div className="sidebar-email text-muted">{user.email}</div>
+              <div className="sidebar-name">{state.user?.name}</div>
+              <div className="sidebar-email text-muted">{state.user?.email}</div>
             </div>
           </div>
 
@@ -200,21 +190,19 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
           </nav>
         </aside>
 
-        {/* Content */}
         <section className="profile-content">
           <header className="content-header">
             <h1>Mi perfil</h1>
-            <div className="small-tabs">
-              {["Solicitudes", "Favoritos", "Historial", "Configuración"].map((t) => (
-                <button key={t} className={`mini-tab ${section === t ? "active" : ""}`} onClick={() => setSection(t)}>
-                  {t}
+            <div className="section-tabs">
+              {["Solicitudes", "Favoritos", "Historial", "Configuración"].map((s) => (
+                <button key={s} className={`mini-tab ${section === s ? "active" : ""}`} onClick={() => setSection(s)}>
+                  {s}
                 </button>
               ))}
             </div>
           </header>
 
           <div className="content-body">
-            {/* Solicitudes */}
             {section === "Solicitudes" && (
               <div className="panel card">
                 <h2>Solicitudes</h2>
@@ -274,7 +262,6 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
               </div>
             )}
 
-            {/* Favoritos */}
             {section === "Favoritos" && (
               <div className="panel card">
                 <h2>Favoritos</h2>
@@ -282,10 +269,7 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
                   {state.favoritos.length === 0 && <div className="text-muted">No tienes favoritos</div>}
                   {state.favoritos.map((b) => (
                     <article className="fav-card" key={b.id}>
-                      <div className="fav-thumb">
-                        {b.cover ? <img src={b.cover} alt={b.title} /> : <div className="cover-placeholder">📚</div>}
-                      </div>
-
+                      <div className="fav-thumb">{b.cover ? <img src={b.cover} alt={b.title} /> : <div className="cover-placeholder">📚</div>}</div>
                       <div className="fav-body">
                         <div className="fav-title">{b.title}</div>
                         <div className="fav-author text-muted">
@@ -308,7 +292,6 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
               </div>
             )}
 
-            {/* Historial */}
             {section === "Historial" && (
               <div className="panel">
                 <h2>Historial de lectura</h2>
@@ -316,10 +299,7 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
                   <div className="chart-wrap card">
                     <h3>Géneros leídos</h3>
                     <div style={{ height: 220 }}>
-                      <Doughnut
-                        data={doughnutData}
-                        options={{ maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }}
-                      />
+                      <Doughnut data={doughnutData} options={{ maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }} />
                     </div>
                   </div>
 
@@ -372,7 +352,6 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
               </div>
             )}
 
-            {/* Configuración */}
             {section === "Configuración" && (
               <div className="panel card">
                 <h2>Configuración</h2>
@@ -383,8 +362,8 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
                       {AVATARS.map((a, i) => (
                         <button
                           key={a}
-                          className={`avatar-choice ${avatarPick === a ? "selected" : ""}`}
-                          onClick={() => setAvatarPick(a)}
+                          className={`avatar-choice ${pendingAvatar === a ? "selected" : ""}`}
+                          onClick={() => setPendingAvatar(a)}
                           aria-label={`Avatar ${i + 1}`}
                         >
                           <img src={a} alt={`avatar ${i + 1}`} />
@@ -393,7 +372,7 @@ export default function Profile({ user: userProp = null, onNavigate = () => {} }
                     </div>
 
                     <div style={{ marginTop: 12 }}>
-                      <img src={avatarPick} alt="selected avatar" style={{ width: 72, height: 72, borderRadius: 8 }} />
+                      <img src={pendingAvatar} alt="selected avatar" style={{ width: 72, height: 72, borderRadius: 8 }} />
                     </div>
                   </div>
 
