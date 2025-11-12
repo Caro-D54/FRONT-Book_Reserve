@@ -8,6 +8,11 @@
   --muted: #a8a8a8;
   --card-bg: #0e2149;
   --img-fondo: url('../assets/Library_books.jpg');
+  --bg-0: #041022;
+  --bg-1: #071026;
+  --card: rgba(255,255,255,0.02);
+  --accent-gold: #E6B85A;
+  --acc-dark: #7d5824;
 }
 
 /* Box-sizing baseline */
@@ -417,15 +422,357 @@
 }
 
 /* ---------- Profile / Requests ---------- */
-.nexus .profile { padding:3.5rem 0; }
-.nexus .profile-container { display:grid; grid-template-columns:1fr 3fr; gap:1rem; align-items:start; }
-.nexus .profile-sidebar, .nexus .profile-content { background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.05)); padding:1rem; border-radius:8px; border:1px solid rgba(255,255,255,0.04); }
+.nexus .profile-page {
+  padding: 1.5rem;
+  background: linear-gradient(180deg, var(--bg-0), var(--bg-1));
+  min-height: 100vh;
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.nexus .profile-container {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.nexus .profile-sidebar {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.nexus .sidebar-top {
+  margin-bottom: 0.6rem;
+}
+
+.nexus .sidebar-user {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.nexus .sidebar-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.nexus .sidebar-name {
+  font-weight: 700;
+}
+
+.nexus .sidebar-email {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+}
+
+.nexus .sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.nexus .nav-btn {
+  background: transparent;
+  border: none;
+  color: inherit;
+  text-align: left;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.nexus .nav-btn.active, .nexus .nav-btn:hover {
+  background: rgba(230, 184, 90, 0.08);
+  color: var(--text);
+}
+
+.nexus .content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.nexus .content-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.nexus .section-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nexus .mini-tab {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+  color: inherit;
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.nexus .mini-tab.active {
+  background: linear-gradient(180deg, #E6B85A22, #B9862B11);
+  color: #081424;
+  border-color: transparent;
+}
+
+.nexus .panel {
+  margin-bottom: 1rem;
+}
+
+.nexus .card {
+  background: var(--card);
+  padding: 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  box-shadow: 0 12px 28px rgba(2, 6, 12, 0.12);
+}
+/* Solicitudes */
+.nexus .tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.nexus .tab {
+  background: transparent;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  color: var(--text);
+}
+
+.nexus .tab.active {
+  background: rgba(230, 184, 9, 0.08);
+  color: #F6EAD6;
+  border-color: transparent;
+}
+
+.nexus .table-wrap {
+  overflow: auto;
+}
+.nexus .sol-table, .hist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+.nexus .sol-table th, .sol-table td, .hist-table th, .hist-table td {
+  padding: 0.6rem 0.5rem;
+  text-align: left;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
+}
+.nexus .badge {
+  padding: 0.225rem 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  display: inline-block;
+}
+.nexus .estado-pediente {
+  background: #F6D57F;
+  color: #6A4B10;
+}
+.nexus .estado-aprobada {
+  background: #7BD389;
+  color: #063B16;
+}
+.nexus .estado-rechazada {
+  background: #f28b82;
+  color: #5a1a16;
+}
+
+.nexus .actions .btn {
+  margin-right: 0.35rem;
+}
+
+/* Buttons */
+.nexus .btn {
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+.nexus .btn-sm {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+}
+.nexus .btn-accept {
+  background: #4caf50;
+  color: #081424;
+}
+.nexus .btn-reject {
+  background: #e15759;
+  color: #081424;
+}
+.nexus .btn-muted {
+  background: rgba(255,255,255,0.03);
+  color: inherit;
+}
+.nexus .btn-outline {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Favoritos */
+.nexus .fav-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.9rem;
+}
+.nexus .fav-card {
+  display: flex;
+  gap: 0.7rem;
+  padding: 0.6rem;
+  border-radius: 10px;
+  align-items: flex-start;
+  background: var(--card);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+.nexus .fav-thumb img { 
+  width:72px; 
+  height:100px; 
+  object-fit:cover; 
+  border-radius:6px; 
+}
+.cover-placeholder { 
+  width:72px; 
+  height:100px; 
+  display:flex; 
+  align-items:center; 
+  justify-content:center; 
+  background: rgba(255,255,255,0.01); 
+  border-radius:6px; 
+  font-size:1.6rem; 
+}
+.fav-body { 
+  flex:1; 
+  display:flex; 
+  flex-direction:column; 
+  gap:0.3rem; 
+}
+.fav-title { 
+  font-weight:700; 
+}
+.fav-author, .fav-genre { 
+  color:var(--muted); 
+  font-size:0.92rem; 
+}
+
+/* Historial */
+.hist-top { 
+  display:flex; 
+  gap:1rem; 
+  align-items:stretch; 
+  margin-bottom:1rem; 
+}
+.grid-2 { 
+  display:grid; 
+  grid-template-columns: 320px 1fr; 
+  gap:1rem; 
+}
+.chart-wrap { 
+  height:260px; 
+  display:flex; 
+  flex-direction:column; 
+  gap:0.5rem; 
+}
+.stats-wrap .stat { 
+  display:flex; 
+  justify-content:space-between; 
+  padding:0.5rem 0; 
+  border-bottom:1px dashed rgba(255,255,255,0.03); 
+}
+.stat-label { 
+  color:var(--muted); 
+}
+.stat-value { 
+  font-weight:700; 
+  color:var(--text); 
+}
+
+/* Config */
+.config-grid { 
+  display:grid; 
+  grid-template-columns: 240px 1fr; 
+  gap:1rem; 
+}
+.avatar-options { 
+  display:flex; 
+  gap:0.5rem; 
+  flex-wrap:wrap; 
+}
+.avatar-choice { 
+  border:1px solid rgba(255,255,255,0.03); 
+  padding:0.25rem; 
+  border-radius:8px; 
+  background:transparent; 
+  cursor:pointer; 
+  display:inline-flex; 
+}
+.avatar-choice.selected { 
+  box-shadow: 0 8px 18px rgba(230,184,90,0.12); 
+  border-color: rgba(230,184,90,0.28); 
+}
+.avatar-choice img { 
+  width:56px; 
+  height:56px; 
+  object-fit:cover; 
+  border-radius:8px; 
+}
+
+/* Inputs */
+.form-input { 
+  width:100%; 
+  padding:0.5rem; 
+  border-radius:8px; 
+  border:1px solid rgba(255,255,255,0.04); 
+  background: rgba(255,255,255,0.01); 
+  color:inherit; 
+}
+
+/* Small utilities */
+.text-muted { 
+  color: var(--muted); 
+  font-size:0.95rem; 
+}
+.summary-avatar { 
+  width:72px; 
+  height:72px; 
+  border-radius:10px; 
+  object-fit:cover; 
+}
 
 /* Status badges */
-.nexus .status { padding:5px 10px; border-radius:18px; font-size:.82rem; font-weight:600; }
-.nexus .status-pending { background:#fff3cd; color:#856404; }
-.nexus .status-approved { background:#d1edff; color:#0c5460; }
-.nexus .status-rejected { background:#f8d7da; color:#721c24; }
+.nexus .status { 
+  padding:5px 10px; 
+  border-radius:18px; 
+  font-size:.82rem; 
+  font-weight:600; 
+}
+.nexus .status-pending { 
+  background:#fff3cd; 
+  color:#856404; 
+}
+.nexus .status-approved { 
+  background:#d1edff; 
+  color:#0c5460; 
+}
+.nexus .status-rejected { 
+  background:#f8d7da; 
+  color:#721c24; 
+}
 
 /* ---------- Modal ---------- */
 .nexus .modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,12,0.6); z-index:1050; }
@@ -445,6 +792,15 @@
     grid-template-columns: 1fr 1fr;
     gap: 1.25rem;
   }
+  .nexus .profile-container {
+    grid-template-columns: 200px 1fr;
+  }
+  .nexus .fav-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .nexus .grid-2 {
+    grid-template-columns: 1fr;
+  }
 }
 @media (max-width: 768px) {
   .nexus .header-content { flex-direction:column; align-items:stretch; gap:.75rem; }
@@ -452,6 +808,31 @@
   .nexus .books-grid { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); }
   .book-thumb-wrap { width: 110px; flex: 0 0 110px; }
   .book-thumb { width: 110px; height: 160px; }
+}
+@media (max-width: 640px) {
+  .nexus .profile-container {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+  .nexus .profile-sidebar {
+    order: 2;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nexus .profile-content {
+    order: 1;
+  }
+  .nexus .fav-grid {
+    grid-template-columns: 1fr;
+  }
+  .nexus .config-grid {
+    grid-template-columns: 1fr;
+  }
+  .nexus .chart-wrap {
+    height: 220px;
+  }
 }
 @media (max-width: 576px) {
   .nexus .feature-icon{
