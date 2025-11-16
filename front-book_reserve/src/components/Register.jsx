@@ -31,10 +31,14 @@ export default function Register() {
     try {
       await register({ name: name.trim(), mail: email.trim(), password });
       setMessage({ type: "success", text: "Registro completado. Redirigiendo..." });
-      navigate("/profile");
+      setTimeout(() => navigate("/profile"), 1000);
     } catch (err) {
       console.error(err);
-      setMessage({ type: "error", text: "Error al registrar. Intenta de nuevo." });
+      const backendMessage =
+        err?.response?.data?.error ||
+        err?.response?.data?.detail ||
+        "Error al registrar. Intenta de nuevo.";
+      setMessage({ type: "error", text: backendMessage });
     } finally {
       setSubmitting(false);
     }
@@ -79,7 +83,17 @@ export default function Register() {
 
           {message && (
             <div role="status" aria-live="polite" style={{ marginTop: 8 }}>
-              <div style={{ color: message.type === "error" ? "#ffb4b4" : "#e6f7df", fontWeight: 600 }}>{message.text}</div>
+              <div
+                style={{
+                  color: message.type === "error" ? "#d9534f" : "#3c763d",
+                  backgroundColor: message.type === "error" ? "#f2dede" : "#dff0d8",
+                  padding: "8px",
+                  borderRadius: "4px",
+                  fontWeight: 600,
+                }}
+              >
+                {message.text}
+              </div>
             </div>
           )}
 
