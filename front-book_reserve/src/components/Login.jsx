@@ -8,7 +8,6 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
-
   const { login } = useAuth();
   const navigate = useNavigate();
 
@@ -22,15 +21,11 @@ export default function Login() {
     }
 
     try {
-      await login({ mail: email.trim(), password });
-      navigate('/profile'); // redirige al perfil tras login exitoso
+      await login({ mail: email, password });
+      navigate('/dashboard'); // ajusta la ruta según tu app
     } catch (err) {
       console.error(err);
-      const backendMessage =
-        err?.response?.data?.detail ||
-        err?.response?.data?.error ||
-        'Credenciales inválidas o error de red.';
-      setError(backendMessage);
+      setError('Credenciales inválidas o error de red.');
     }
   };
 
@@ -83,18 +78,14 @@ export default function Login() {
 
           <button type="submit" className="btn btn-cta login-submit">Iniciar Sesión</button>
 
-          {error && (
-            <p className="form-error" style={{ color: 'red', marginTop: '0.5rem' }}>
-              {error}
-            </p>
-          )}
+          {error && <p className="form-error" style={{ color: 'red', marginTop: '0.5rem' }}>{error}</p>}
 
           <div className="login-footer">
             <span className="muted">¿No tienes una cuenta?</span>
             <button
               type="button"
               className="btn btn-link login-register"
-              onClick={() => navigate('/register')}
+              onClick={() => (window.location.href = '/register')}
             >
               Regístrate
             </button>
