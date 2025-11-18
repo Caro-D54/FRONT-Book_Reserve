@@ -11,10 +11,10 @@ export const AuthProvider = ({ children }) => {
   // Configurar header de autorización
   const setAuthHeader = (access) => {
     if (access) {
-      sessionStorage.setItem("access_token", access);
+      localStorage.setItem("access_token", access);
       axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${access}`;
     } else {
-      sessionStorage.removeItem("access_token");
+      localStorage.removeItem("access_token");
       delete axiosInstance.defaults.headers.common["Authorization"];
     }
   };
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   // Inicializar sesión si hay token guardado
   useEffect(() => {
     const init = async () => {
-      const access = sessionStorage.getItem("access_token");
+      const access = localStorage.getItem("access_token");
       if (!access) {
         setLoading(false);
         return;
@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }) => {
       try {
         await getProfile();
       } catch (e) {
+        console.error("Error obteniendo perfil", e);
         setAuthHeader(null);
         setUser(null);
       } finally {
@@ -49,27 +50,35 @@ export const AuthProvider = ({ children }) => {
 
   // Login con email y password
   const login = async (email, password) => {
-    const resp = await axiosInstance.post("/users/token/", { email, password });
-    const { access, refresh } = resp.data;
-    setAuthHeader(access);
-    localStorage.setItem("refresh_token", refresh || "");
-    return await getProfile();
+    try {
+      const resp = await axiosInstance.post("/users/token/", { email, password });
+      const { access, refresh } = resp.data;
+      setAuthHeader(access);
+      localStorage.setItem("refresh_token", refresh || "");
+      return await getProfile();
+    } catch (e) {
+      throw new Error("Error en login: " + (e.response?.data?.error || e.message));
+    }
   };
 
   // Registro de usuario
-  const register = async (name, email, password) => {
-    const resp = await axiosInstance.post("/users/register/", {
-      name,
-      email,
-      password,
-    });
-    if (resp.data?.access && resp.data?.refresh) {
-      setAuthHeader(resp.data.access);
-      localStorage.setItem("refresh_token", resp.data.refresh);
-      return await getProfile();
+  const register = async (username, email, password) => {
+    try {
+      const resp = await axiosInstance.post("/users/register/", {
+        username,
+        email,
+        password,
+      });
+      if (resp.data?.access && resp.data?.refresh) {
+        setAuthHeader(resp.data.access);
+        localStorage.setItem("refresh_token", resp.data.refresh);
+        return await getProfile();
+      }
+      // Si no devuelve tokens, hacer login manual
+      return await login(email, password);
+    } catch (e) {
+      throw new Error("Error en registro: " + (e.response?.data?.error || e.message));
     }
-    // Si no devuelve tokens, hacer login manual
-    return await login(email, password);
   };
 
   // Logout (invalidar refresh en backend y limpiar frontend)
