@@ -8,7 +8,19 @@ const axiosInstance = axios.create({
   },
 });
 
-// Interceptor de respuesta: manejar expiración del access token
+// 🔹 Interceptor de petición: añade el token a cada request automáticamente
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// 🔹 Interceptor de respuesta: refresca el token si expira
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
@@ -18,14 +30,19 @@ axiosInstance.interceptors.response.use(
       try {
         const refresh = localStorage.getItem("refresh_token");
         if (!refresh) throw new Error("No hay refresh token");
+
         const res = await axios.post(
-          `${axiosInstance.defaults.baseURL}/api/token/refresh/`,
+          `${axiosInstance.defaults.baseURL}users_management/token/refresh/`,
           { refresh }
         );
+
         const newAccess = res.data.access;
         localStorage.setItem("access_token", newAccess);
+
+        // Actualizar headers con el nuevo token
         axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
         originalRequest.headers["Authorization"] = `Bearer ${newAccess}`;
+
         return axiosInstance(originalRequest);
       } catch (err) {
         // Si falla el refresh → forzar logout

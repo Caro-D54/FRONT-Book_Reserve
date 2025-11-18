@@ -4,27 +4,34 @@ import axiosInstance from "../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 
 const Login = ({ onLogin = () => {} }) => {
-  const [email, setEmail] = useState("");
+  const [mail, setMail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const[error, setError] = useState(null);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    // valida mínimo (puedes reemplazar con validación real / llamada API)
-    if (!email || !password) {
+
+    if (!mail || !password) {
       alert("Por favor completa correo y contraseña.");
       return;
     }
+
     try {
-      const response = await axiosInstance.post("/api/token/", { email, password });
+      // Login con mail y password
+      const response = await axiosInstance.post("/users_management/token/", { mail, password });
       localStorage.setItem("access_token", response.data.access);
       localStorage.setItem("refresh_token", response.data.refresh);
-      const me = await axiosInstance.get("/api/users/me/");
+
+      // Obtener perfil del usuario autenticado
+      const me = await axiosInstance.get("/users_management/me/", {
+        headers: { Authorization: `Bearer ${response.data.access}` },
+      });
       localStorage.setItem("user", JSON.stringify(me.data));
 
+      // Redirigir según rol
       if (me.data.is_staff || me.data.is_superuser) {
         navigate("/admin/profile");
       } else {
@@ -43,14 +50,14 @@ const Login = ({ onLogin = () => {} }) => {
         <h1 id="login-title" className="login-title">Iniciar Sesión</h1>
 
         <form className="login-form" onSubmit={handleSubmit} noValidate>
-          <label className="form-label" htmlFor="login-email">Correo Electrónico</label>
+          <label className="form-label" htmlFor="login-mail">Correo Electrónico</label>
           <input
-            id="login-email"
+            id="login-mail"
             type="email"
             className="form-control login-input"
             placeholder="usuario@ejemplo.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={mail}
+            onChange={(e) => setMail(e.target.value)}
             required
             aria-required="true"
           />

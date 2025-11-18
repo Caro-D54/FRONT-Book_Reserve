@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
 
   // Obtener perfil del usuario autenticado
   const getProfile = async () => {
-    const res = await axiosInstance.get("/users/me/");
+    const res = await axiosInstance.get("/users_management/me/");
     setUser(res.data);
     return res.data;
   };
@@ -48,10 +48,10 @@ export const AuthProvider = ({ children }) => {
     init();
   }, []);
 
-  // Login con email y password
-  const login = async (email, password) => {
+  // Login con mail y password
+  const login = async (mail, password) => {
     try {
-      const resp = await axiosInstance.post("/users/token/", { email, password });
+      const resp = await axiosInstance.post("/users_management/token/", { mail, password });
       const { access, refresh } = resp.data;
       setAuthHeader(access);
       localStorage.setItem("refresh_token", refresh || "");
@@ -62,11 +62,11 @@ export const AuthProvider = ({ children }) => {
   };
 
   // Registro de usuario
-  const register = async (username, email, password) => {
+  const register = async (name, mail, password) => {
     try {
-      const resp = await axiosInstance.post("/users/register/", {
-        username,
-        email,
+      const resp = await axiosInstance.post("/users_management/register/", {
+        mail,
+        name,
         password,
       });
       if (resp.data?.access && resp.data?.refresh) {
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }) => {
         return await getProfile();
       }
       // Si no devuelve tokens, hacer login manual
-      return await login(email, password);
+      return await login(mail, password);
     } catch (e) {
       throw new Error("Error en registro: " + (e.response?.data?.error || e.message));
     }
@@ -86,7 +86,7 @@ export const AuthProvider = ({ children }) => {
     const refresh = localStorage.getItem("refresh_token");
     if (refresh) {
       try {
-        await axiosInstance.post("/users/logout/", { refresh });
+        await axiosInstance.post("/users_management/logout/", { refresh });
       } catch (e) {
         console.error("Error cerrando sesión en backend", e);
       }
