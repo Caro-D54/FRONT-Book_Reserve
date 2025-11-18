@@ -1,8 +1,13 @@
-import React from "react";
+// src/components/Header.jsx
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import "./Library.css";
 import logo from "../assets/Logo_3d.png";
 
-const Header = ({ user, onNavigate = () => {}, onLogout = () => {}, searchQuery = "", setSearchQuery = () => {} }) => {
+const Header = () => {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
   return (
     <header>
       <div className="container">
@@ -15,24 +20,45 @@ const Header = ({ user, onNavigate = () => {}, onLogout = () => {}, searchQuery 
 
           <nav aria-label="Main navigation">
             <ul>
-              <li><button className="btn btn-link text-decoration-none text-reset" onClick={() => onNavigate("home")}>Inicio</button></li>
-              <li><button className="btn btn-link text-decoration-none text-reset" onClick={() => onNavigate("catalog")}>Catálogo</button></li>
-              <li><button className="btn btn-link text-decoration-none text-reset" onClick={() => onNavigate("profile")}>Mi Perfil</button></li>
-              <li><button className="btn btn-link text-decoration-none text-reset" onClick={() => onNavigate("help")}>Ayuda</button></li>
+              <li>
+                <button className="btn btn-link text-decoration-none text-reset" onClick={() => navigate("/")}>
+                  Inicio
+                </button>
+              </li>
+              <li>
+                <button className="btn btn-link text-decoration-none text-reset" onClick={() => navigate("/catalog")}>
+                  Catálogo
+                </button>
+              </li>
+              <li>
+                <button className="btn btn-link text-decoration-none text-reset" onClick={() => navigate("/profile")}>
+                  Mi Perfil
+                </button>
+              </li>
+              <li>
+                <button className="btn btn-link text-decoration-none text-reset" onClick={() => navigate("/recommendations")}>
+                  Ayuda
+                </button>
+              </li>
             </ul>
           </nav>
 
           <div className="user-actions">
-            
             {user ? (
               <>
                 <span className="text-muted ms-2">{user.name}</span>
-                <button className="btn btn-outline ms-2" onClick={() => { onLogout(); }}>Salir</button>
+                <button className="btn btn-outline ms-2" onClick={logout}>
+                  Salir
+                </button>
               </>
             ) : (
               <>
-                <button className="btn btn-outline" onClick={() => onNavigate("login")}>Iniciar Sesión</button>
-                <button className="btn btn-primary" onClick={() => onNavigate("register")}>Registrarse</button>
+                <button className="btn btn-outline" onClick={() => navigate("/login")}>
+                  Iniciar Sesión
+                </button>
+                <button className="btn btn-primary" onClick={() => navigate("/register")}>
+                  Registrarse
+                </button>
               </>
             )}
           </div>

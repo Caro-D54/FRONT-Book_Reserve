@@ -14,7 +14,11 @@ import Recommendations from "./components/Recommendations";
 import Login from "./components/Login";
 import Register from "./components/Register"; // TODO: cambiar nombre
 
+import ManageRequests from "./components/ManageRequests";
+import ManageBranches from "./components/ManageBranches";
+
 import "./App.css"; // estilos opcionales
+import ManageBooks from "./components/ManageBooks";
 
 function App() {
   return (
@@ -49,6 +53,24 @@ function App() {
                     <LibrarianProfile />
                   </ProtectedRoute>
                 }
+              />
+              <Route path="/admin/books" element={
+                <ProtectedRoute requireAdmin>
+                  <ManageBooks />
+                </ProtectedRoute>
+              } 
+              />
+              <Route path="/admin/requests" element={
+                <ProtectedRoute requireAdmin>
+                  <ManageRequests />
+                </ProtectedRoute>
+              } 
+              />
+              <Route path="/admin/branches" element={
+                <ProtectedRoute requireAdmin>
+                  <ManageBranches />
+                </ProtectedRoute>
+              } 
               />
 
               {/* Fallback */}

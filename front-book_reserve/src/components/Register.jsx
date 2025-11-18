@@ -66,7 +66,7 @@ export default function Register({ onRegister = null }) {
   return (
     <main className="register-page nexus" aria-live="polite">
       <div className="register-backdrop" aria-hidden="true" />
-      <section className="register-panel" role="region" aria-labelledby="register-title">
+      <section className="register-panel" aria-labelledby="register-title">
         <h1 id="register-title" className="register-title">Crear cuenta</h1>
 
         <form className="register-form" onSubmit={handleSubmit} noValidate>

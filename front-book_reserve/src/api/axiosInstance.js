@@ -2,7 +2,10 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:8000/api",
+  baseURL: "http://127.0.0.1:8000/",
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 // Interceptor de respuesta: manejar expiración del access token
@@ -16,7 +19,7 @@ axiosInstance.interceptors.response.use(
         const refresh = localStorage.getItem("refresh_token");
         if (!refresh) throw new Error("No hay refresh token");
         const res = await axios.post(
-          `${axiosInstance.defaults.baseURL}/users/token/refresh/`,
+          `${axiosInstance.defaults.baseURL}/api/token/refresh/`,
           { refresh }
         );
         const newAccess = res.data.access;

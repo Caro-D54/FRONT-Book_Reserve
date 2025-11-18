@@ -1,19 +1,38 @@
 import React, { useState } from "react";
 import "./Library.css";
+import axiosInstance from "../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ onLogin = () => {} }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const[error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
+    setError(null);
     // valida mínimo (puedes reemplazar con validación real / llamada API)
     if (!email || !password) {
       alert("Por favor completa correo y contraseña.");
       return;
     }
-    onLogin({ email, password });
+    try {
+      const response = await axiosInstance.post("/api/token/", { email, password });
+      localStorage.setItem("access_token", response.data.access);
+      localStorage.setItem("refresh_token", response.data.refresh);
+      const me = await axiosInstance.get("/api/users/me/");
+      localStorage.setItem("user", JSON.stringify(me.data));
+
+      if (me.data.is_staff || me.data.is_superuser) {
+        navigate("/admin/profile");
+      } else {
+        navigate("/profile");
+      }
+    } catch (err) {
+      setError("Credenciales inválidas");
+    }
   };
 
   return (
@@ -57,12 +76,13 @@ const Login = ({ onLogin = () => {} }) => {
               {showPassword ? "Ocultar" : "Ver"}
             </button>
           </div>
+          {error && <p className="text-danger mt-2">{error}</p>}
 
           <button type="submit" className="btn btn-cta login-submit">Iniciar Sesión</button>
 
           <div className="login-footer">
             <span className="muted">¿No tienes una cuenta?</span>
-            <button type="button" className="btn btn-link login-register" onClick={() => window.location.href = "/register"}>Regístrate</button>
+            <button type="button" className="btn btn-link login-register" onClick={() => navigate("/register")}>Regístrate</button>
           </div>
         </form>
       </div>
