@@ -1,12 +1,17 @@
 import React from "react";
 import LibraryHero from "./LibraryHero";
 import Recommendations from "./Recommendations";
+
 import "./Library.css";
 
 const Home = ({ onNavigate = () => {}, searchQuery = "", setSearchQuery = () => {} }) => {
   return (
     <>
-      <LibraryHero searchQuery={searchQuery} setSearchQuery={setSearchQuery} onSearch={() => onNavigate("catalog")} />
+      <LibraryHero 
+        searchQuery={searchQuery} 
+        setSearchQuery={setSearchQuery} 
+        onSearch={() => onNavigate("catalog")} 
+      />
       <Recommendations />
       <section className="container py-4">
         <div className="section-title">
