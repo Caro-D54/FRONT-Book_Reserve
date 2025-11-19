@@ -22,4 +22,16 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Interceptor para errores globales
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      sessionStorage.removeItem('access_token');
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default axiosInstance;
