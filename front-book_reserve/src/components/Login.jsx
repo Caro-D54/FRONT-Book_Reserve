@@ -16,13 +16,15 @@ export default function Login() {
     e.preventDefault();
     setError(null);
 
+    //const success = await login(email, password)
+
     if (!email || !password) {
       setError('Por favor completa correo y contraseña.');
       return;
     }
 
     try {
-      await login({ mail: email.trim(), password });
+      await login(email, password);
       navigate('/profile'); // redirige al perfil tras login exitoso
     } catch (err) {
       console.error(err);
