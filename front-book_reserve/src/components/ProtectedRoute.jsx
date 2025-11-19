@@ -1,14 +1,16 @@
-import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import './Library.css';
+// src/components/ProtectedRoute.jsx
+import React from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "./Library.css";
 
-const AccessDeniedUI = () => (
+/* Pequeñas UIs reutilizables */
+const AccessDeniedUI = ({ title = "Acceso Denegado", message = "Debes iniciar sesión para acceder a esta página." }) => (
   <div className="access-denied" role="alert" aria-live="polite">
     <div className="access-denied-content">
       <i className="fas fa-exclamation-triangle" aria-hidden="true"></i>
-      <h2>Acceso Denegado</h2>
-      <p>Debes iniciar sesión para acceder a esta página.</p>
+      <h2>{title}</h2>
+      <p>{message}</p>
     </div>
   </div>
 );
@@ -25,28 +27,50 @@ const LoadingUI = () => (
 /**
  * ProtectedRoute
  * Props:
- *  - children: node(s). If provided, the component will return children when authenticated.
- *  - redirectWhenUnauthorized: boolean (default false). If true, unauthenticated users are redirected to /login.
+ *  - children: optional React node(s). If provided, returns children when authorized.
+ *  - requireAdmin: boolean (default false). If true, blocks non-admin users.
+ *  - redirectToLogin: boolean (default false). If true, unauthenticated users are redirected to /login.
+ *  - redirectWhenUnauthorized: alias for redirectToLogin accepted for compatibility.
  *
- * Usage patterns:
- * 1) As wrapper: <ProtectedRoute><MyComponent/></ProtectedRoute>
- * 2) With react-router nesting: <Route element={<ProtectedRoute redirectWhenUnauthorized />}> <Route path="..." element={<Page/>} /> </Route>
+ * Usage:
+ * 1) Wrapper: <ProtectedRoute requireAdmin><Page/></ProtectedRoute>
+ * 2) Nested route: <Route element={<ProtectedRoute redirectWhenUnauthorized />}> <Route path="..." element={<Page/>} /> </Route>
  */
-const ProtectedRoute = ({ children = null, redirectWhenUnauthorized = false }) => {
+const ProtectedRoute = ({
+  children = null,
+  requireAdmin = false,
+  redirectToLogin = false,
+  redirectWhenUnauthorized = false,
+}) => {
+  // permitir cualquiera de los alias para compatibilidad
+  const shouldRedirect = redirectToLogin || redirectWhenUnauthorized;
+
   const { user, loading } = useAuth();
 
-  if (loading) {
-    return <LoadingUI />;
-  }
+  if (loading) return <LoadingUI />;
 
+  // no autenticado
   if (!user) {
-    if (redirectWhenUnauthorized) {
-      return <Navigate to="/login" replace />;
-    }
+    if (shouldRedirect) return <Navigate to="/login" replace />;
     return <AccessDeniedUI />;
   }
 
-  // If children were provided, render them (wrapper usage). Otherwise render nested routes (Outlet).
+  // comprobar rol admin si se requiere
+  if (requireAdmin) {
+    const isAdmin =
+      user.is_staff === true ||
+      user.is_admin === true ||
+      user.role === "admin" ||
+      user.role === "staff" ||
+      (user.permissions && typeof user.permissions.includes === "function" && user.permissions.includes("admin"));
+
+    if (!isAdmin) {
+      // si queremos redirigir en vez de mostrar mensaje, cambiar aquí
+      return <AccessDeniedUI title="Acceso Restringido" message="No tienes permisos para ver esta sección." />;
+    }
+  }
+
+  // autorizado: devolvemos children (modo wrapper) o Outlet (modo nesting)
   return children ? children : <Outlet />;
 };
 
