@@ -1,26 +1,49 @@
-import React, { useState } from "react";
-import "./Library.css";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import './Library.css';
 
-const Login = ({ onLogin = () => {} }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // valida mínimo (puedes reemplazar con validación real / llamada API)
+    setError(null);
+
     if (!email || !password) {
-      alert("Por favor completa correo y contraseña.");
+      setError('Por favor completa correo y contraseña.');
       return;
     }
-    onLogin({ email, password });
+
+    try {
+      await login({ mail: email.trim(), password });
+      navigate('/profile'); // redirige al perfil tras login exitoso
+    } catch (err) {
+      console.error(err);
+      const backendMessage =
+        err?.response?.data?.detail ||
+        err?.response?.data?.error ||
+        'Credenciales inválidas o error de red.';
+      setError(backendMessage);
+    }
   };
 
   return (
     <main className="login-page">
       <div className="login-backdrop" />
 
-      <div className="login-panel" role="dialog" aria-labelledby="login-title" aria-modal="true">
+      <div
+        className="login-panel"
+        role="dialog"
+        aria-labelledby="login-title"
+        aria-modal="true"
+      >
         <h1 id="login-title" className="login-title">Iniciar Sesión</h1>
 
         <form className="login-form" onSubmit={handleSubmit} noValidate>
@@ -40,7 +63,7 @@ const Login = ({ onLogin = () => {} }) => {
           <div className="password-row">
             <input
               id="login-password"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               className="form-control login-input"
               placeholder="Ingresa tu contraseña"
               value={password}
@@ -51,23 +74,33 @@ const Login = ({ onLogin = () => {} }) => {
             <button
               type="button"
               className="btn-toggle-pass"
-              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
               onClick={() => setShowPassword((s) => !s)}
             >
-              {showPassword ? "Ocultar" : "Ver"}
+              {showPassword ? 'Ocultar' : 'Ver'}
             </button>
           </div>
 
           <button type="submit" className="btn btn-cta login-submit">Iniciar Sesión</button>
 
+          {error && (
+            <p className="form-error" style={{ color: 'red', marginTop: '0.5rem' }}>
+              {error}
+            </p>
+          )}
+
           <div className="login-footer">
             <span className="muted">¿No tienes una cuenta?</span>
-            <button type="button" className="btn btn-link login-register" onClick={() => window.location.href = "/register"}>Regístrate</button>
+            <button
+              type="button"
+              className="btn btn-link login-register"
+              onClick={() => navigate('/register')}
+            >
+              Regístrate
+            </button>
           </div>
         </form>
       </div>
     </main>
   );
-};
-
-export default Login;
+}

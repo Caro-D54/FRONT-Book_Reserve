@@ -54,10 +54,23 @@ function AppShell({ isUserAdmin }) {
 
           <Route path="/register" element={<Register />} />
 
-          <Route element={<ProtectedRoute redirectToLogin={true} />}>
-            <Route path="/profile" element={<Profile user={user} />} />
-            <Route path="/recommendations" element={<Recommendations />} />
-          </Route>
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute redirectToLogin={true}>
+                <Profile user={user} />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/recommendations"
+            element={
+              <ProtectedRoute redirectToLogin={true}>
+                <Recommendations />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/admin"
